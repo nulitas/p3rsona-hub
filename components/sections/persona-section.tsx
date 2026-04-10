@@ -112,32 +112,6 @@ export default function PersonaSection() {
           })}
         </div>
       </div>
-
-      {/* Right Column: Giant Display Graphic and Text Overlay — hidden on mobile */}
-      <div className="hidden md:block w-[55%] h-full relative z-10 pointer-events-none pb-[10vh]">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="absolute bottom-[20%] left-[-15%] font-black uppercase text-7xl md:text-8xl tracking-tighter text-[#00f0ff] z-30 opacity-90 drop-shadow-[4px_4px_0_rgba(0,0,0,0.8)] whitespace-nowrap"
-        >
-          DO UNTO OTHERS
-        </motion.div>
-
-        {/* Keyboard prompts — decorative design element, desktop only */}
-        <div className="absolute right-0 bottom-[-20%] flex flex-col items-end z-40 text-white font-sans">
-          <div className="flex items-center text-xl italic font-bold">
-            <span className="text-[10px] mr-2 opacity-70">Guide</span>
-            Which entry do you want to change to?
-          </div>
-          <div className="flex items-center gap-6 mt-2 font-black tracking-widest text-[#00f0ff]">
-            <span>(Y) Stats</span>
-            <span>(B) Change Persona</span>
-            <span>(A) Back</span>
-            <span className="text-white">(+) Release</span>
-          </div>
-        </div>
-      </div>
     </motion.div>
   );
 }

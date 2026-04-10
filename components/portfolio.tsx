@@ -25,7 +25,7 @@ export default function Portfolio() {
 
   // Splash Screen Timer
   useEffect(() => {
-    const timer = setTimeout(() => setShowSplash(false), 2000);
+    const timer = setTimeout(() => setShowSplash(false), 3500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -72,24 +72,110 @@ export default function Portfolio() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden text-white font-outfit select-none bg-[#0a52f4]">
-      {/* 1. Initial Water Splash Screen overlay */}
+      {/* 1. Dark Hour Clock Splash Screen overlay */}
       <AnimatePresence>
         {showSplash && (
           <motion.div
-            initial={{ opacity: 1, clipPath: "circle(100% at 50% 50%)" }}
+            initial={{ opacity: 1, filter: "brightness(1) contrast(1)", scale: 1 }}
             exit={{
               opacity: 0,
-              clipPath: "circle(0% at 50% 50%)",
-              transition: { duration: 1, ease: "easeInOut" },
+              filter: "brightness(3) contrast(1.5)",
+              scale: 1.1,
+              transition: { duration: 0.8, ease: "easeIn" },
             }}
-            className="absolute inset-0 z-999 bg-[#00f0ff] flex items-center justify-center pointer-events-none"
+            className="absolute inset-0 z-[999] bg-[#020b06] flex items-center justify-center pointer-events-none overflow-hidden"
           >
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="text-black text-6xl md:text-8xl font-black italic tracking-tighter"
+            {/* Ambient Dark Hour Glow */}
+            <motion.div 
+               className="absolute inset-0 z-0 opacity-30 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#00ff2a]/30 via-[#020b06]/80 to-black"
+               animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+               transition={{ duration: 3.5, ease: "easeInOut" }}
+            />
+
+            {/* Giant Clock Face */}
+            <motion.div 
+               className="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px] rounded-full border-[2px] md:border-[4px] border-[#0a2f16] flex items-center justify-center bg-black/80 shadow-[0_0_80px_rgba(0,255,42,0.15)]"
+               initial={{ scale: 0.8, opacity: 0, rotate: -15 }}
+               animate={{ scale: 1, opacity: 1, rotate: 0 }}
+               transition={{ duration: 1.5, ease: "easeOut" }}
             >
-              INITIALIZING...
+              {/* Inner Decorative Rings */}
+              <div className="absolute inset-4 md:inset-8 rounded-full border border-[#0a2f16]/60" />
+              <div className="absolute inset-10 md:inset-20 rounded-full border border-[#0a2f16]/30" />
+
+              {/* Clock Markers */}
+              {[...Array(12)].map((_, i) => (
+                 <div key={`marker-${i}`} className="absolute inset-0 flex px-2 py-3 md:p-6" style={{ transform: `rotate(${i * 30}deg)` }}>
+                    <div className={`mx-auto rounded-full ${i % 3 === 0 ? "w-1.5 md:w-2 h-6 md:h-10 bg-[#165a29] shadow-[0_0_10px_#165a29]" : "w-1 md:w-1.5 h-3 md:h-6 bg-[#0a2f16]"}`} />
+                 </div>
+              ))}
+
+              {/* Hour Hand */}
+              <motion.div 
+                className="absolute w-[4px] md:w-[8px] h-[70px] md:h-[120px] bg-[#165a29] rounded-full bottom-1/2 left-1/2 -ml-[2px] md:-ml-[4px] origin-bottom"
+                initial={{ rotate: -10 }} 
+                animate={{ rotate: 0 }} 
+                transition={{ duration: 2.2, ease: "anticipate" }}
+              />
+              
+              {/* Minute Hand */}
+              <motion.div 
+                className="absolute w-[2px] md:w-[4px] h-[100px] md:h-[160px] bg-[#00ff2a] rounded-full bottom-1/2 left-1/2 -ml-[1px] md:-ml-[2px] origin-bottom shadow-[0_0_15px_#00ff2a]"
+                initial={{ rotate: -120 }} 
+                animate={{ rotate: 0 }} 
+                transition={{ duration: 2.2, ease: "anticipate" }}
+              />
+              
+              {/* Second Hand */}
+              <motion.div 
+                className="absolute w-[1px] md:w-[2px] h-[110px] md:h-[180px] bg-white/70 rounded-full bottom-1/2 left-1/2 -ml-[0.5px] md:-ml-[1px] origin-bottom"
+                initial={{ rotate: -1080 }} 
+                animate={{ rotate: 0 }} 
+                transition={{ duration: 2.2, ease: "anticipate" }}
+              />
+
+              {/* Center Dot */}
+              <div className="relative w-4 h-4 md:w-6 md:h-6 bg-[#00ff2a] flex items-center justify-center rounded-full shadow-[0_0_20px_#00ff2a] z-20" />
+            </motion.div>
+
+            {/* Flash Effect exactly when it hits 12 */}
+            <motion.div
+               className="absolute inset-0 bg-[#00ff2a] mix-blend-screen z-50 pointer-events-none"
+               initial={{ opacity: 0 }}
+               animate={{ opacity: [0, 0, 1, 0] }}
+               transition={{ duration: 3.5, times: [0, 0.628, 0.642, 1] }}
+            />
+
+            {/* Digital Time at bottom */}
+            <motion.div className="absolute bottom-12 md:bottom-20 z-20 flex flex-col items-center">
+               <div className="text-[#00ff2a] font-black text-5xl md:text-7xl tracking-[0.2em] shadow-[0_0_30px_rgba(0,255,42,0.5)] font-mono ml-4 relative h-[1.2em] w-[4em] flex justify-center drop-shadow-[0_0_20px_#00ff2a]">
+                 <motion.span
+                   initial={{ opacity: 1 }}
+                   animate={{ opacity: [1, 1, 0, 0] }}
+                   transition={{ duration: 3.5, times: [0, 0.628, 0.642, 1] }}
+                   className="absolute whitespace-nowrap"
+                 >
+                   23:59
+                 </motion.span>
+                 <motion.span
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: [0, 0, 1, 1] }}
+                   transition={{ duration: 3.5, times: [0, 0.628, 0.642, 1] }}
+                   className="absolute whitespace-nowrap"
+                 >
+                   00:00
+                 </motion.span>
+               </div>
+               
+               {/* Dark Hour Text */}
+               <motion.div
+                 initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                 animate={{ opacity: [0, 0, 1, 1], y: [30, 30, 0, 0], filter: ["blur(10px)", "blur(10px)", "blur(0px)", "blur(0px)"] }}
+                 transition={{ duration: 3.5, times: [0, 0.628, 0.65, 1] }}
+                 className="text-[#00ff2a] text-lg md:text-2xl tracking-[0.6em] mt-2 md:mt-4 uppercase italic font-outfit"
+               >
+                 THE DARK HOUR
+               </motion.div>
             </motion.div>
           </motion.div>
         )}

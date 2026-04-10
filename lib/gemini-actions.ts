@@ -9,7 +9,6 @@ if (!apiKey) {
   console.warn("GEMINI_API_KEY environment variable is not set");
 }
 
-
 export async function generateChatResponse(
   message: string,
 ): Promise<{ success: boolean; response?: string; error?: string }> {
@@ -24,7 +23,7 @@ export async function generateChatResponse(
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
+      model: "gemini-3.1-flash-lite-preview",
       systemInstruction: PORTFOLIO_CONTEXT,
     });
 

@@ -63,6 +63,21 @@ export default function ProfileSection() {
         variants={itemVariants}
         className="relative z-10 w-full md:w-[150vw] md:-ml-[25vw] mt-4 md:mt-16 transform md:-rotate-6"
       >
+        {/* Action Links - Moved to the top */}
+        <div className="flex gap-4 md:gap-6 mb-4 md:mb-6 mx-auto md:mx-0 md:ml-[32vw] relative z-30">
+          <a
+            href="https://github.com/nulitas"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 bg-white text-black text-center font-black italic px-8 py-3 text-2xl -skew-x-15 hover:bg-[#00e5ff] transition-colors border-4 border-[#050505] shadow-[6px_6px_0_rgba(0,0,0,0.7)] group"
+          >
+            <span className="skew-x-15 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 group-hover:bg-[#e60012] group-hover:scale-110 transition-transform">
+              G
+            </span>
+            <span className="skew-x-15 block tracking-wider">GitHub</span>
+          </a>
+        </div>
+
         {/* Top Header Block: Name, Lv, HP, SP */}
         <div className="bg-[#050505] text-white p-4 md:p-6 pb-6 md:pb-8 flex flex-col md:flex-row items-start md:items-end justify-start relative px-6 md:px-0 md:pl-[32vw]">
           <div className="flex flex-col items-start leading-none pr-4 md:pr-8 mb-4 md:mb-0">
@@ -76,7 +91,9 @@ export default function ProfileSection() {
           </div>
 
           <div className="flex items-end gap-2 md:ml-4 mb-4 md:mb-1">
-            <span className="text-[#00e5ff] text-2xl md:text-4xl font-light">/Lv</span>
+            <span className="text-[#00e5ff] text-2xl md:text-4xl font-light">
+              /Lv
+            </span>
             <span className="text-5xl md:text-6xl font-black leading-none tracking-tighter shadow-black drop-shadow-md">
               99
             </span>
@@ -133,9 +150,7 @@ export default function ProfileSection() {
           <div className="flex items-center gap-2 text-xl md:text-2xl font-black uppercase relative py-2 md:py-3 my-4 md:my-6 group w-full md:w-150 max-w-full">
             {/* Orange background slash */}
             <div className="absolute inset-y-0 -left-6 md:-left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[4px] md:border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
-            <span
-              className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-2 md:pl-4 text-stroke-1"
-            >
+            <span className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-2 md:pl-4 text-stroke-1">
               Focus Area
             </span>
             <span className="relative z-10 text-[#050505] font-black ml-6 tracking-tighter bg-white/80 px-2 skew-x-[8deg]">
@@ -146,33 +161,17 @@ export default function ProfileSection() {
           {/* Stats below */}
           <div className="mt-6 md:mt-8 flex flex-wrap gap-4 md:gap-10 items-center text-lg md:text-2xl font-bold uppercase tracking-tight relative z-10 w-full md:w-150 max-w-full">
             <div className="flex items-center">
-              Frontend <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
+              Frontend{" "}
+              <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
               <span className="font-black text-2xl md:text-4xl ml-2">177</span>
             </div>
             <div className="flex items-center">
-              Backend <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
+              Backend{" "}
+              <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
               <span className="font-black text-2xl md:text-4xl ml-2">154</span>
             </div>
           </div>
         </div>
-      </motion.div>
-
-      {/* Action Links mimicking in-game bottom controls */}
-      <motion.div
-        variants={itemVariants}
-        className="flex gap-4 md:gap-6 mt-4 md:mt-1 mx-auto md:mx-0 md:ml-[15vw] relative z-30 transform md:-rotate-6"
-      >
-        <a
-          href="https://github.com/nulitas"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 bg-white text-black text-center font-black italic px-8 py-3 text-2xl -skew-x-15 hover:bg-[#00e5ff] transition-colors border-4 border-[#050505] shadow-[6px_6px_0_rgba(0,0,0,0.7)] group"
-        >
-          <span className="skew-x-15 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 group-hover:bg-[#e60012] group-hover:scale-110 transition-transform">
-            G
-          </span>
-          <span className="skew-x-15 block tracking-wider">GitHub</span>
-        </a>
       </motion.div>
 
       {/* Footer Clock */}
@@ -182,9 +181,7 @@ export default function ProfileSection() {
       >
         <span className="opacity-70 mr-4">CLOCK_SYNC</span>
         <span className="font-mono text-2xl bg-[#050505] px-3 py-1 -skew-x-15 inline-block shadow-[3px_3px_0_#00e5ff] border border-white/20">
-          <span className="skew-x-15 block">
-            {loginTime || "LOADING..."}
-          </span>
+          <span className="skew-x-15 block">{loginTime || "LOADING..."}</span>
         </span>
       </motion.div>
     </motion.div>

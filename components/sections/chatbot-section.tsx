@@ -296,13 +296,13 @@ export default function ChatbotSection() {
                   /* Velvet Room Igor Dialogue Box */
                   <div className="relative">
                     {/* Floating Igor Face for the Dialogue Box */}
-                    <div className="absolute -left-14 md:-left-32 bottom-0 w-12 md:w-40 h-20 md:h-48 z-20 pointer-events-none drop-shadow-2xl">
+                    {/* <div className="absolute -left-14 md:-left-32 bottom-0 w-12 md:w-40 h-20 md:h-48 z-20 pointer-events-none drop-shadow-2xl">
                       <img
                         src="/igor.png"
                         alt="Igor"
                         className="w-full h-full object-contain object-bottom drop-shadow-[5px_5px_0_rgba(0,0,0,0.8)]"
                       />
-                    </div>
+                    </div> */}
 
                     {/* Dialogue Box Name Plate */}
                     <div className="absolute -top-6 -left-4 bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">

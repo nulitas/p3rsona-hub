@@ -112,13 +112,6 @@ export default function SystemSection() {
           <div className="bg-white text-black px-4 md:px-12 py-1 rounded-full text-sm md:text-2xl tracking-tight leading-none h-full flex items-center border-l-4 border-white">
             System
           </div>
-          {/* Inactive Tabs */}
-          <div className="bg-transparent text-black/60 px-2 md:px-4 py-1 text-xs md:text-xl tracking-tight hidden md:flex items-center h-full cursor-not-allowed transition-colors">
-            Architecture
-          </div>
-          <div className="bg-[#121ebb] text-white px-4 md:px-6 py-1 text-xs md:text-xl tracking-tight hidden md:flex items-center h-full rounded-r-full transform translate-x-1 border border-white/20">
-            Deployment
-          </div>
         </div>
       </motion.div>
 

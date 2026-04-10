@@ -1,21 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-const dummyDatabase = [
-  { arcana: "Temper.", level: 42, name: "Seiryu" },
-  { arcana: "Fool", level: 40, name: "Black Frost" },
-  { arcana: "Hiero.", level: 30, name: "Shiisaa" },
-  { arcana: "Devil", level: 34, name: "Baphomet" },
-  { arcana: "Magician", level: 34, name: "Sati" },
-  { arcana: "Hermit", level: 25, name: "Lamia" },
-  { arcana: "Fortune", level: 28, name: "Kushi Mitama" },
-  { arcana: "Star", level: 30, name: "Setanta" },
-  { arcana: "Sun", level: 25, name: "Yatagarasu" },
-  { arcana: "Emperor", level: 37, name: "King Frost" },
-  { arcana: "Lovers", level: 28, name: "Queen Medb" },
-  { arcana: "Moon", level: 15, name: "Gurulu" },
+const skillDatabase = [
+  { arcana: "Frontend", level: 99, name: "React.js", hue: 195, emoji: "⚛️" },
+  { arcana: "Frontend", level: 95, name: "Next.js", hue: 0, emoji: "⬛" },
+  { arcana: "Frontend", level: 85, name: "Vue.js", hue: 153, emoji: "🌿" },
+  { arcana: "Styling", level: 98, name: "Tailwind CSS", hue: 190, emoji: "🌬️" },
+  { arcana: "Backend", level: 88, name: "Laravel", hue: 350, emoji: "🐘" },
+  { arcana: "Backend", level: 90, name: "Express.js", hue: 60, emoji: "🚂" },
+  { arcana: "Backend", level: 85, name: "FastAPI", hue: 175, emoji: "⚡" },
+  { arcana: "Language", level: 95, name: "TypeScript", hue: 210, emoji: "📘" },
+  { arcana: "Language", level: 99, name: "JavaScript", hue: 50, emoji: "🟨" },
+  { arcana: "Language", level: 85, name: "PHP", hue: 240, emoji: "🐘" },
+  { arcana: "Language", level: 90, name: "Python", hue: 215, emoji: "🐍" },
+  { arcana: "Data/AI", level: 80, name: "TensorFlow", hue: 25, emoji: "🧠" },
 ];
 
 export default function PersonaSection() {
@@ -61,7 +61,7 @@ export default function PersonaSection() {
       {/* Left Column: Menu Items */}
       <div className="w-full md:w-[45%] flex flex-col relative z-20 h-auto md:h-[70vh] pl-2 md:pl-10 mt-4 md:mt-10">
         <div className="flex flex-col gap-1 w-full max-w-full md:max-w-125 overflow-y-auto custom-scrollbar pr-2 md:pr-4 max-h-[45vh] md:max-h-none">
-          {dummyDatabase.map((item, index) => {
+          {skillDatabase.map((item, index) => {
             const isSelected = hoveredIndex === index;
 
             return (
@@ -111,6 +111,63 @@ export default function PersonaSection() {
             );
           })}
         </div>
+      </div>
+
+      {/* Right Column: Dynamic Persona Image/Icon */}
+      <div className="absolute right-[-10vw] md:right-[5vw] top-0 bottom-0 w-[120vw] md:w-[50%] pointer-events-none z-10 flex items-center justify-center overflow-hidden">
+        <AnimatePresence mode="wait">
+          {skillDatabase[hoveredIndex] && (
+            <motion.div
+              key={hoveredIndex}
+              initial={{
+                opacity: 0,
+                scale: 0.9,
+                x: 50,
+                filter: "blur(10px)",
+                rotate: 5,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                x: 0,
+                filter: "blur(0px)",
+                rotate: 0,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 1.1,
+                x: -50,
+                filter: "blur(10px)",
+                rotate: -5,
+              }}
+              transition={{ type: "spring", stiffness: 150, damping: 20 }}
+              className="flex flex-col items-center justify-center relative w-full h-full"
+            >
+              {/* Background Colored Aura */}
+              <div
+                className="absolute inset-0 opacity-40 mix-blend-screen"
+                style={{
+                  background: `radial-gradient(circle at center, hsl(${skillDatabase[hoveredIndex].hue}, 80%, 40%) 0%, transparent 60%)`,
+                }}
+              />
+
+              {/* Massive Icon/Emoji Placeholder */}
+              <div
+                className="text-[14rem] md:text-[25rem] leading-none z-20"
+                style={{
+                  filter: `drop-shadow(15px 15px 0px rgba(0,0,0,0.8)) saturate(1.5) hue-rotate(${skillDatabase[hoveredIndex].hue}deg)`,
+                }}
+              >
+                {skillDatabase[hoveredIndex].emoji}
+              </div>
+
+              {/* Persona Name floating behind horizontally */}
+              <div className="absolute font-black italic text-[7rem] md:text-[15rem] tracking-tighter text-white/5 whitespace-nowrap z-10 transform -rotate-12 scale-150 pointer-events-none select-none">
+                {skillDatabase[hoveredIndex].name.toUpperCase()}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

@@ -43,7 +43,7 @@ export default function ProfileSection() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="flex flex-col h-full w-full relative z-10 p-0 pt-[15vh] font-sans italic bg-black/40 overflow-hidden"
+      className="flex flex-col h-full w-full relative z-10 p-0 pt-[10vh] md:pt-[15vh] font-sans italic bg-black/40 md:overflow-hidden overflow-y-auto overflow-x-hidden custom-scrollbar"
     >
       {/* Avatar on the right side */}
       <motion.img
@@ -56,16 +56,16 @@ export default function ProfileSection() {
           e.currentTarget.src = "/avatar.png";
         }}
         alt="Avatar"
-        className="absolute right-[-5%] bottom-[0%] h-[110%] w-auto object-contain z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
+        className="absolute right-[-20%] md:right-[-5%] bottom-0 h-[60%] md:h-[110%] opacity-30 md:opacity-100 w-auto object-contain z-0 md:z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
       />
 
       <motion.div
         variants={itemVariants}
-        className="relative z-10 w-[150vw] -ml-[25vw] mt-16 transform -rotate-6"
+        className="relative z-10 w-full md:w-[150vw] md:-ml-[25vw] mt-4 md:mt-16 transform md:-rotate-6"
       >
         {/* Top Header Block: Name, Lv, HP, SP */}
-        <div className="bg-[#050505] text-white p-6 pb-8 flex items-end justify-start relative pl-[32vw]">
-          <div className="flex flex-col items-start leading-none pr-8">
+        <div className="bg-[#050505] text-white p-4 md:p-6 pb-6 md:pb-8 flex flex-col md:flex-row items-start md:items-end justify-start relative px-6 md:px-0 md:pl-[32vw]">
+          <div className="flex flex-col items-start leading-none pr-4 md:pr-8 mb-4 md:mb-0">
             <span className="text-xl font-medium tracking-widest text-gray-300">
               Andra R.
             </span>
@@ -75,14 +75,14 @@ export default function ProfileSection() {
             </div>
           </div>
 
-          <div className="flex items-end gap-2 ml-4 mb-1">
-            <span className="text-[#00e5ff] text-4xl font-light">/Lv</span>
-            <span className="text-6xl font-black leading-none tracking-tighter shadow-black drop-shadow-md">
+          <div className="flex items-end gap-2 md:ml-4 mb-4 md:mb-1">
+            <span className="text-[#00e5ff] text-2xl md:text-4xl font-light">/Lv</span>
+            <span className="text-5xl md:text-6xl font-black leading-none tracking-tighter shadow-black drop-shadow-md">
               99
             </span>
           </div>
 
-          <div className="flex flex-col ml-16 gap-4 w-60 pr-4 mt-2">
+          <div className="flex flex-col md:ml-16 gap-4 w-full md:w-60 pr-0 md:pr-4 mt-2">
             {/* HP */}
             <div className="flex flex-col relative w-full">
               <div className="flex justify-between items-end mb-1 font-bold">
@@ -114,28 +114,27 @@ export default function ProfileSection() {
           </div>
         </div>
 
-        {/* Thick black separator line to sell the 3D look */}
-        <div className="h-4 w-[150vw] bg-[#0a0a0a] relative z-20"></div>
+        {/* Thick black separator line to sell the 3D look (Hidden on mobile) */}
+        <div className="hidden md:block h-4 w-[150vw] bg-[#0a0a0a] relative z-20"></div>
 
         {/* Persona Info Block */}
-        <div className="p-8 pb-16 pl-[32vw] pr-12 bg-white text-black relative">
-          <div className="flex items-center gap-4 font-bold text-3xl tracking-tighter mb-6 relative z-10 w-150 max-w-full">
-            <div className="w-6 h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] shrink-0"></div>
+        <div className="p-6 md:p-8 pb-10 md:pb-16 px-6 md:px-0 md:pl-[32vw] md:pr-12 bg-white text-black relative">
+          <div className="flex items-center gap-2 md:gap-4 font-bold text-2xl md:text-3xl tracking-tighter mb-4 md:mb-6 relative z-10 w-full md:w-150 max-w-full">
+            <div className="w-4 h-4 md:w-6 md:h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] shrink-0"></div>
             <span className="uppercase font-semibold tracking-wider opacity-80">
               Fool
             </span>
-            <span className="font-black text-4xl ml-2 tracking-tight">
+            <span className="font-black text-2xl md:text-4xl ml-2 tracking-tight">
               Lv 99 Developer
             </span>
           </div>
 
           {/* Attack Type Swoosh */}
-          <div className="flex items-center gap-2 text-2xl font-black uppercase relative py-3 my-6 group w-150 max-w-full">
+          <div className="flex items-center gap-2 text-xl md:text-2xl font-black uppercase relative py-2 md:py-3 my-4 md:my-6 group w-full md:w-150 max-w-full">
             {/* Orange background slash */}
-            <div className="absolute inset-y-0 -left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
+            <div className="absolute inset-y-0 -left-6 md:-left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[4px] md:border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
             <span
-              className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-4"
-              style={{ WebkitTextStroke: "1px black" }}
+              className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-2 md:pl-4 text-stroke-1"
             >
               Focus Area
             </span>
@@ -145,14 +144,14 @@ export default function ProfileSection() {
           </div>
 
           {/* Stats below */}
-          <div className="mt-8 flex gap-10 items-center text-2xl font-bold uppercase tracking-tight relative z-10 w-150 max-w-full">
+          <div className="mt-6 md:mt-8 flex flex-wrap gap-4 md:gap-10 items-center text-lg md:text-2xl font-bold uppercase tracking-tight relative z-10 w-full md:w-150 max-w-full">
             <div className="flex items-center">
-              Frontend <span className="text-3xl ml-2 opacity-50">•</span>
-              <span className="font-black text-4xl ml-2">177</span>
+              Frontend <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
+              <span className="font-black text-2xl md:text-4xl ml-2">177</span>
             </div>
             <div className="flex items-center">
-              Backend <span className="text-3xl ml-2 opacity-50">•</span>
-              <span className="font-black text-4xl ml-2">154</span>
+              Backend <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
+              <span className="font-black text-2xl md:text-4xl ml-2">154</span>
             </div>
           </div>
         </div>
@@ -161,7 +160,7 @@ export default function ProfileSection() {
       {/* Action Links mimicking in-game bottom controls */}
       <motion.div
         variants={itemVariants}
-        className="flex gap-6 mt-1 ml-[15vw] relative z-30 transform -rotate-6"
+        className="flex gap-4 md:gap-6 mt-4 md:mt-1 mx-auto md:mx-0 md:ml-[15vw] relative z-30 transform md:-rotate-6"
       >
         <a
           href="https://github.com/nulitas"
@@ -179,7 +178,7 @@ export default function ProfileSection() {
       {/* Footer Clock */}
       <motion.div
         variants={itemVariants}
-        className="absolute bottom-8 right-8 text-white font-bold italic text-xl tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.8)] z-40"
+        className="fixed md:absolute bottom-4 right-4 md:bottom-8 md:right-8 text-white font-bold italic text-sm md:text-xl tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.8)] z-40"
       >
         <span className="opacity-70 mr-4">CLOCK_SYNC</span>
         <span className="font-mono text-2xl bg-[#050505] px-3 py-1 -skew-x-15 inline-block shadow-[3px_3px_0_#00e5ff] border border-white/20">

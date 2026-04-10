@@ -80,13 +80,13 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
     {
       key: "profile",
       label: "STATS",
-      layoutClass: "-rotate-12 translate-x-12",
+      layoutClass: "-rotate-12 translate-x-4 md:translate-x-12",
       zIndex: "z-[40]",
     },
     {
       key: "projects",
       label: "PROJECTS",
-      layoutClass: "-rotate-2 translate-x-2",
+      layoutClass: "-rotate-2 translate-x-1 md:translate-x-2",
       zIndex: "z-[30]",
     },
     {
@@ -98,13 +98,13 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
     {
       key: "system",
       label: "SYSTEM",
-      layoutClass: "rotate-6 -translate-x-2",
+      layoutClass: "rotate-6 -translate-x-1 md:-translate-x-2",
       zIndex: "z-[20]",
     },
     {
       key: "chatbot",
       label: "VELVET RM",
-      layoutClass: "rotate-[15deg] translate-x-4",
+      layoutClass: "rotate-[15deg] translate-x-2 md:translate-x-4",
       zIndex: "z-[10]",
     },
   ];
@@ -144,7 +144,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
 
           {/* The Huge Text Label */}
           <div
-            className={`relative z-10 font-black text-7xl md:text-[8rem] leading-[0.85] uppercase tracking-tighter transition-all duration-300 drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)] 
+            className={`relative z-10 font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter transition-all duration-300 drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)] 
               text-[#4deeea] group-hover:text-black group-hover:drop-shadow-none px-4`}
           >
             {label}

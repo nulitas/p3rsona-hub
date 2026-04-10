@@ -29,7 +29,9 @@ export default function RootLayout({
         className={`font-sans ${outfit.variable}`}
       >
         <Suspense fallback={null}>{children}</Suspense>
-        <Analytics />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </body>
     </html>
   );

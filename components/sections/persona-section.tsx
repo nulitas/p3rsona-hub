@@ -44,7 +44,7 @@ export default function PersonaSection() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="flex h-full w-full relative z-10 px-[5vw] pt-[25vh] overflow-hidden bg-transparent"
+      className="flex flex-col md:flex-row h-full w-full relative z-10 px-[4vw] md:px-[5vw] pt-[22vh] md:pt-[25vh] overflow-hidden bg-transparent"
     >
       {/* Angled Top Header */}
       <div className="absolute top-0 left-0 w-full h-[22vh] bg-white -skew-y-2 origin-top-left z-0 shadow-2xl flex items-end overflow-hidden pb-2 pl-4">
@@ -52,15 +52,15 @@ export default function PersonaSection() {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-[10rem] md:text-[14rem] font-black italic tracking-tighter text-[#121ebb] opacity-90 leading-none drop-shadow-[5px_5px_0_rgba(0,0,0,0.1)]"
+          className="text-[5rem] sm:text-[7rem] md:text-[10rem] lg:text-[14rem] font-black italic tracking-tighter text-[#121ebb] opacity-90 leading-none drop-shadow-[5px_5px_0_rgba(0,0,0,0.1)]"
         >
           PERSONA
         </motion.div>
       </div>
 
       {/* Left Column: Menu Items */}
-      <div className="w-[45%] flex flex-col relative z-20 h-[70vh] pl-10 mt-10">
-        <div className="flex flex-col gap-1 w-full max-w-125 overflow-y-auto custom-scrollbar pr-4">
+      <div className="w-full md:w-[45%] flex flex-col relative z-20 h-auto md:h-[70vh] pl-2 md:pl-10 mt-4 md:mt-10">
+        <div className="flex flex-col gap-1 w-full max-w-full md:max-w-125 overflow-y-auto custom-scrollbar pr-2 md:pr-4 max-h-[45vh] md:max-h-none">
           {dummyDatabase.map((item, index) => {
             const isSelected = hoveredIndex === index;
 
@@ -113,8 +113,8 @@ export default function PersonaSection() {
         </div>
       </div>
 
-      {/* Right Column: Giant Display Graphic and Text Overlay */}
-      <div className="w-[55%] h-full relative z-10 flexitems-center justify-center pointer-events-none pb-[10vh]">
+      {/* Right Column: Giant Display Graphic and Text Overlay — hidden on mobile */}
+      <div className="hidden md:block w-[55%] h-full relative z-10 pointer-events-none pb-[10vh]">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -124,6 +124,7 @@ export default function PersonaSection() {
           DO UNTO OTHERS
         </motion.div>
 
+        {/* Keyboard prompts — decorative design element, desktop only */}
         <div className="absolute right-0 bottom-[-20%] flex flex-col items-end z-40 text-white font-sans">
           <div className="flex items-center text-xl italic font-bold">
             <span className="text-[10px] mr-2 opacity-70">Guide</span>

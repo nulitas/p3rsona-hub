@@ -97,7 +97,7 @@ export default function SystemSection() {
         initial={{ opacity: 0, scale: 0.9, rotate: -35 }}
         animate={{ opacity: 1, scale: 1, rotate: -35 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="absolute bottom-10 right-[-10%] text-[8rem] md:text-[14rem] font-black italic pointer-events-none select-none z-0 text-[#0c144a] leading-none tracking-tighter opacity-80"
+        className="absolute bottom-10 right-[-10%] text-[6rem] md:text-[14rem] font-black italic pointer-events-none select-none z-0 text-[#0c144a] leading-none tracking-tighter opacity-80"
       >
         SYSTEM
       </motion.div>
@@ -109,21 +109,21 @@ export default function SystemSection() {
       >
         <div className="flex bg-white rounded-full items-center pl-2 pr-1 h-10 md:h-12 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
           {/* Active Tab */}
-          <div className="bg-white text-black px-6 md:px-12 py-1 rounded-full text-lg md:text-2xl tracking-tight leading-none h-full flex items-center border-l-4 border-white">
+          <div className="bg-white text-black px-4 md:px-12 py-1 rounded-full text-sm md:text-2xl tracking-tight leading-none h-full flex items-center border-l-4 border-white">
             System
           </div>
           {/* Inactive Tabs */}
-          <div className="bg-transparent text-black/60 px-4 py-1 text-base md:text-xl tracking-tight hidden md:flex items-center h-full cursor-not-allowed transition-colors">
+          <div className="bg-transparent text-black/60 px-2 md:px-4 py-1 text-xs md:text-xl tracking-tight hidden md:flex items-center h-full cursor-not-allowed transition-colors">
             Architecture
           </div>
-          <div className="bg-[#121ebb] text-white px-6 py-1 text-base md:text-xl tracking-tight hidden md:flex items-center h-full rounded-r-full transform translate-x-1 border border-white/20">
+          <div className="bg-[#121ebb] text-white px-4 md:px-6 py-1 text-xs md:text-xl tracking-tight hidden md:flex items-center h-full rounded-r-full transform translate-x-1 border border-white/20">
             Deployment
           </div>
         </div>
       </motion.div>
 
       {/* Main Bulleted List Area */}
-      <div className="flex flex-col w-full max-w-300 z-10 mt-12 px-[5vw] pl-[8vw] md:pl-[12vw]">
+      <div className="flex flex-col w-full max-w-300 z-10 mt-8 md:mt-12 px-[5vw] pl-[8vw] md:pl-[12vw]">
         <div className="flex flex-col gap-1 w-full md:w-[80%]">
           {systemEntries.map((entry, index) => {
             const isActive = entry.type === "audio";
@@ -132,7 +132,7 @@ export default function SystemSection() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className={`relative w-full flex items-center font-sans transition-all px-4 py-3 min-h-16 ${
+                className={`relative w-full flex items-center font-sans transition-all px-2 md:px-4 py-2 md:py-3 min-h-12 md:min-h-16 ${
                   isActive
                     ? "bg-white text-black z-20 shadow-[0_4px_10px_rgba(0,0,0,0.5)] scale-[1.01]"
                     : "bg-transparent text-[#00f0ff] z-10 cursor-default"
@@ -143,26 +143,26 @@ export default function SystemSection() {
                 )}
 
                 <div
-                  className={`mr-4 text-xl md:text-2xl leading-none font-black ${isActive ? "text-[#121ebb]" : "text-[#00f0ff]"}`}
+                  className={`mr-2 md:mr-4 text-lg md:text-2xl leading-none font-black ${isActive ? "text-[#121ebb]" : "text-[#00f0ff]"}`}
                 >
                   •
                 </div>
 
                 <div
-                  className={`flex-1 flex flex-col md:flex-row md:items-center text-sm md:text-lg font-bold leading-relaxed tracking-wide ${isActive ? "text-[#121ebb]" : "text-[#00f0ff] drop-shadow-[0_0_2px_rgba(0,240,255,0.4)]"}`}
+                  className={`flex-1 flex flex-col md:flex-row md:items-center text-xs md:text-lg font-bold leading-relaxed tracking-wide ${isActive ? "text-[#121ebb]" : "text-[#00f0ff] drop-shadow-[0_0_2px_rgba(0,240,255,0.4)]"}`}
                 >
                   {entry.type === "text" ? (
                     entry.content
                   ) : (
-                    <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
-                      <span className="shrink-0 w-32 uppercase tracking-widest">
+                    <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 w-full">
+                      <span className="shrink-0 w-24 md:w-32 uppercase tracking-widest text-[10px] md:text-base">
                         BGM Settings
                       </span>
 
-                      <div className="flex items-center gap-4 flex-1">
+                      <div className="flex items-center gap-2 md:gap-4 flex-1">
                         <button
                           onClick={toggleMute}
-                          className={`w-10 h-10 flex items-center justify-center rounded-full border-2 transition-colors ${
+                          className={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full border-2 transition-colors ${
                             isActive
                               ? "border-[#121ebb] hover:bg-[#121ebb] hover:text-white"
                               : "border-[#00f0ff] hover:bg-[#00f0ff] hover:text-black"
@@ -171,8 +171,8 @@ export default function SystemSection() {
                           {isMuted || volume === 0 ? (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
+                              width="16"
+                              height="16"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -187,8 +187,8 @@ export default function SystemSection() {
                           ) : (
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              width="20"
-                              height="20"
+                              width="16"
+                              height="16"
                               viewBox="0 0 24 24"
                               fill="none"
                               stroke="currentColor"
@@ -209,7 +209,7 @@ export default function SystemSection() {
                           step="0.01"
                           value={isMuted ? 0 : volume}
                           onChange={handleVolumeChange}
-                          className={`flex-1 h-3 rounded-full appearance-none cursor-pointer ${
+                          className={`flex-1 h-2 md:h-3 rounded-full appearance-none cursor-pointer ${
                             isActive ? "bg-[#121ebb]/20" : "bg-[#00f0ff]/20"
                           }`}
                           style={{
@@ -219,7 +219,7 @@ export default function SystemSection() {
                               : `linear-gradient(to right, #00f0ff 0%, #00f0ff ${(isMuted ? 0 : volume) * 100}%, rgba(0,240,255,0.2) ${(isMuted ? 0 : volume) * 100}%, rgba(0,240,255,0.2) 100%)`,
                           }}
                         />
-                        <span className="font-sans font-black w-12 text-right">
+                        <span className="font-sans font-black w-8 md:w-12 text-right text-xs md:text-base">
                           {Math.round((isMuted ? 0 : volume) * 100)}%
                         </span>
                       </div>

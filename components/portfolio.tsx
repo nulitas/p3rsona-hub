@@ -170,7 +170,7 @@ export default function Portfolio() {
               initial={{ x: -200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="absolute left-[0%] md:left-[5%] top-[-10%] w-[70vw] md:w-[45vw] h-[120%] z-20 flex items-start justify-start pointer-events-none"
+              className="absolute opacity-40 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[5%] top-[5%] md:top-[-10%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
             >
               {/* 
                 We use an animated GIF with a transparent background. 
@@ -180,7 +180,7 @@ export default function Portfolio() {
               <motion.img
                 src="/avatar.png"
                 alt="Protagonist"
-                className="w-full h-auto object-contain opacity-90 rotate-180"
+                className="w-full h-auto object-contain rotate-180"
                 style={{
                   filter:
                     "sepia(1) hue-rotate(180deg) saturate(400%) brightness(1.2) contrast(1.1) drop-shadow(10px -10px 30px rgba(0,240,255,0.6))",
@@ -195,7 +195,7 @@ export default function Portfolio() {
             </motion.div>
 
             {/* Centered Tilted Menu */}
-            <div className="absolute inset-0 flex items-center mb-10 justify-center pl-[20%] md:pl-0 z-30">
+            <div className="absolute inset-0 flex items-center mb-10 justify-center pl-[5%] md:pl-[10%] lg:pl-0 z-30">
               <Navigation onSectionChange={setActiveSection} />
             </div>
           </motion.div>
@@ -209,19 +209,19 @@ export default function Portfolio() {
             initial="hidden"
             animate="enter"
             exit="exit"
-            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] backdrop-blur-2xl flex flex-col items-center justify-center p-4 md:p-10 pb-4 overflow-hidden"
+            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] backdrop-blur-2xl flex flex-col items-center justify-center p-2 md:p-10 pb-2 md:pb-4 overflow-hidden"
           >
             {/* Sub-section Back Button */}
             <button
               onClick={() => setActiveSection("none")}
-              className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center z-50 px-6 py-3 bg-white text-black font-black text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
+              className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center z-50 px-4 md:px-6 py-2 md:py-3 bg-white text-black font-black text-sm md:text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
             >
               <div className="skew-x-15 uppercase tracking-wider">
                 &lt; BACK
               </div>
             </button>
 
-            <div className="w-full h-full max-w-350 mx-auto relative mt-20 md:mt-16 overflow-hidden rounded-xl border border-white/10 shadow-2xl bg-black/20">
+            <div className="w-full h-full max-w-350 mx-auto relative mt-16 md:mt-16 overflow-hidden rounded-xl border border-white/10 shadow-2xl bg-black/20">
               {activeSection === "profile" && <ProfileSection />}
               {activeSection === "projects" && <ProjectsSection />}
               {activeSection === "system" && <SystemSection />}

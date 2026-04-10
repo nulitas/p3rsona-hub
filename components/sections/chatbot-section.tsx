@@ -282,7 +282,7 @@ export default function ChatbotSection() {
       >
         <div
           ref={chatHistoryRef}
-          className="grow overflow-y-auto pr-4 pt-16 custom-scrollbar flex flex-col gap-8 pb-10"
+          className="grow overflow-y-auto pr-2 md:pr-4 pt-10 md:pt-16 custom-scrollbar flex flex-col gap-6 md:gap-8 pb-10"
         >
           <AnimatePresence>
             {messages.map((message, index) => (
@@ -290,13 +290,13 @@ export default function ChatbotSection() {
                 key={index}
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                className={`relative max-w-[90%] md:max-w-[75%] ${message.sender === "ai" ? "self-start ml-[5vw] md:ml-[10vw] mt-6" : "self-end"}`}
+                className={`relative max-w-[95%] md:max-w-[75%] ${message.sender === "ai" ? "self-start ml-[8vw] md:ml-[10vw] mt-4 md:mt-6" : "self-end"}`}
               >
                 {message.sender === "ai" ? (
                   /* Velvet Room Igor Dialogue Box */
                   <div className="relative">
                     {/* Floating Igor Face for the Dialogue Box */}
-                    <div className="absolute -left-20 md:-left-32 bottom-0 w-24 md:w-40 h-32 md:h-48 z-20 pointer-events-none drop-shadow-2xl">
+                    <div className="absolute -left-14 md:-left-32 bottom-0 w-12 md:w-40 h-20 md:h-48 z-20 pointer-events-none drop-shadow-2xl">
                       <img
                         src="/igor.png"
                         alt="Igor"
@@ -315,7 +315,7 @@ export default function ChatbotSection() {
                     </div>
 
                     {/* Blue Dialogue Bubble */}
-                    <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-24 border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed pr-10">
+                    <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-4 md:p-6 pt-6 md:pt-8 pb-6 md:pb-8 min-h-16 md:min-h-24 border-l-4 md:border-l-8 border-b-4 md:border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[10px_10px_0_rgba(0,0,0,0.5)] md:shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-sm md:text-lg leading-relaxed pr-8 md:pr-10">
                       {renderMessageWithLinks(message.text)}
                       {/* Blinking arrow indicator */}
                       <div
@@ -345,7 +345,7 @@ export default function ChatbotSection() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="relative max-w-[90%] md:max-w-[75%] self-start ml-[5vw] md:ml-[10vw] mt-6"
+              className="relative max-w-[95%] md:max-w-[75%] self-start ml-[8vw] md:ml-[10vw] mt-4 md:mt-6"
             >
               <div className="relative">
                 <div className="absolute -top-6 -left-4 bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
@@ -357,7 +357,7 @@ export default function ChatbotSection() {
                   </span>
                 </div>
 
-                <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-24 border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed flex items-center gap-2">
+                <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-4 md:p-6 pt-6 md:pt-8 pb-6 md:pb-8 min-h-16 md:min-h-24 border-l-4 md:border-l-8 border-b-4 md:border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[10px_10px_0_rgba(0,0,0,0.5)] md:shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-sm md:text-lg leading-relaxed flex items-center gap-2">
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
@@ -375,7 +375,7 @@ export default function ChatbotSection() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="What is your request?"
-            className="flex-1 p-5 md:p-6 bg-[#03068e]/80 text-white font-bold text-lg md:text-xl tracking-wider placeholder:text-white/40 focus:outline-none transition-all shadow-[10px_10px_0_rgba(0,0,0,0.5)] border-t-2 border-t-[#00f0ff] skew-x-[-5deg] relative z-20"
+            className="flex-1 p-3 md:p-5 lg:p-6 bg-[#03068e]/80 text-white font-bold text-sm md:text-lg lg:text-xl tracking-wider placeholder:text-white/40 focus:outline-none transition-all shadow-[10px_10px_0_rgba(0,0,0,0.5)] border-t-2 border-t-[#00f0ff] skew-x-[-5deg] relative z-20"
             autoComplete="off"
             disabled={isLoading}
           />
@@ -383,16 +383,16 @@ export default function ChatbotSection() {
           <button
             type="submit"
             disabled={isLoading || !inputValue.trim()}
-            className="bg-white hover:bg-[#00f0ff] text-black px-8 py-5 md:py-6 font-black italic tracking-widest text-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all skew-x-[-5deg] shadow-[10px_10px_0_rgba(0,0,0,0.5)] hover:shadow-[-5px_10px_0_rgba(0,0,0,0.8)] z-20 shrink-0"
+            className="bg-white hover:bg-[#00f0ff] text-black px-4 md:px-8 py-3 md:py-5 lg:py-6 font-black italic tracking-widest text-sm md:text-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all skew-x-[-5deg] shadow-[10px_10px_0_rgba(0,0,0,0.5)] hover:shadow-[-5px_10px_0_rgba(0,0,0,0.8)] z-20 shrink-0"
           >
-            <div className="skew-x-[5deg]">SUBMIT</div>
+            <div className="skew-x-[5deg]">SEND</div>
           </button>
 
           <button
             type="button"
             onClick={() => setShowResetModal(true)}
             disabled={isLoading}
-            className="bg-[#021bc9] hover:bg-[#ff003c] text-white px-6 py-5 md:py-6 font-black tracking-widest cursor-pointer transition-all skew-x-[-5deg] shadow-[5px_5px_0_rgba(0,0,0,0.5)] z-20 shrink-0 border border-white/20"
+            className="bg-[#021bc9] hover:bg-[#ff003c] text-white px-3 md:px-6 py-3 md:py-5 lg:py-6 font-black tracking-widest cursor-pointer transition-all skew-x-[-5deg] shadow-[5px_5px_0_rgba(0,0,0,0.5)] z-20 shrink-0 border border-white/20"
             title="Reset Chat"
           >
             <div className="skew-x-[5deg]">X</div>

@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.25 0.08 245); 
+  --foreground: oklch(1 0 0); 
+  --font-outfit: "Outfit", sans-serif;
+}
+
+@theme inline {
+  --font-sans: var(--font-outfit), var(--font-geist-sans), sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans;
+    overflow: hidden; 
+    background-color: #0a52f4; /* Lighter pure P3R blue */
+  }
+}
+
+/* Custom Typography Outlines */
+.text-stroke-cyan {
+  -webkit-text-stroke: 2px #00f0ff;
+  color: transparent;
+}
+
+/* P3R Active Menu Hover Masks */
+.clip-polygon-white {
+  /* Slanted rectangle */
+  clip-path: polygon(5% 15%, 100% 0%, 95% 85%, 0% 100%);
+}
+.clip-polygon-red {
+  /* Sharp triangle pointing left like a cursor */
+  clip-path: polygon(15% 60%, 100% 0%, 90% 100%);
+}
+
+.clip-corner {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+}
+
+.clip-corner-reverse {
+  clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 30px, 100% 100%, 0 100%);
+}
+
+/* Scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.2);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #00f0ff;
+}

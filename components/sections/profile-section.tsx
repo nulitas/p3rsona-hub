@@ -34,7 +34,7 @@ export default function ProfileSection() {
       opacity: 1,
       x: 0,
       y: 0,
-      transition: { type: "spring", stiffness: 350, damping: 25 },
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
     },
   };
 
@@ -93,7 +93,7 @@ export default function ProfileSection() {
                   999<span className="text-sm">/999</span>
                 </span>
               </div>
-              <div className="w-full h-3 bg-gray-800 skew-x-[15deg]">
+              <div className="w-full h-3 bg-gray-800 skew-x-15">
                 <div className="h-full bg-[#00e5ff] w-full shadow-[0_0_8px_#00e5ff]" />
               </div>
             </div>
@@ -107,7 +107,7 @@ export default function ProfileSection() {
                   999<span className="text-sm">/999</span>
                 </span>
               </div>
-              <div className="w-full h-3 bg-gray-800 skew-x-[15deg]">
+              <div className="w-full h-3 bg-gray-800 skew-x-15">
                 <div className="h-full bg-[#ffea00] w-full shadow-[0_0_8px_#ffea00]" />
               </div>
             </div>
@@ -119,8 +119,8 @@ export default function ProfileSection() {
 
         {/* Persona Info Block */}
         <div className="p-8 pb-16 pl-[32vw] pr-12 bg-white text-black relative">
-          <div className="flex items-center gap-4 font-bold text-3xl tracking-tighter mb-6 relative z-10 w-[600px] max-w-full">
-            <div className="w-6 h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] flex-shrink-0"></div>
+          <div className="flex items-center gap-4 font-bold text-3xl tracking-tighter mb-6 relative z-10 w-150 max-w-full">
+            <div className="w-6 h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] shrink-0"></div>
             <span className="uppercase font-semibold tracking-wider opacity-80">
               Fool
             </span>
@@ -130,9 +130,9 @@ export default function ProfileSection() {
           </div>
 
           {/* Attack Type Swoosh */}
-          <div className="flex items-center gap-2 text-2xl font-black uppercase relative py-3 my-6 group w-[600px] max-w-full">
+          <div className="flex items-center gap-2 text-2xl font-black uppercase relative py-3 my-6 group w-150 max-w-full">
             {/* Orange background slash */}
-            <div className="absolute inset-y-0 left-[-8rem] w-[90%] bg-[#f58400] z-0 -skew-x-[25deg] origin-left border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
+            <div className="absolute inset-y-0 -left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
             <span
               className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-4"
               style={{ WebkitTextStroke: "1px black" }}
@@ -145,7 +145,7 @@ export default function ProfileSection() {
           </div>
 
           {/* Stats below */}
-          <div className="mt-8 flex gap-10 items-center text-2xl font-bold uppercase tracking-tight relative z-10 w-[600px] max-w-full">
+          <div className="mt-8 flex gap-10 items-center text-2xl font-bold uppercase tracking-tight relative z-10 w-150 max-w-full">
             <div className="flex items-center">
               Frontend <span className="text-3xl ml-2 opacity-50">•</span>
               <span className="font-black text-4xl ml-2">177</span>
@@ -167,12 +167,12 @@ export default function ProfileSection() {
           href="https://github.com/nulitas"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 bg-white text-black text-center font-black italic px-8 py-3 text-2xl -skew-x-[15deg] hover:bg-[#00e5ff] transition-colors border-[4px] border-[#050505] shadow-[6px_6px_0_rgba(0,0,0,0.7)] group"
+          className="flex items-center justify-center gap-3 bg-white text-black text-center font-black italic px-8 py-3 text-2xl -skew-x-15 hover:bg-[#00e5ff] transition-colors border-4 border-[#050505] shadow-[6px_6px_0_rgba(0,0,0,0.7)] group"
         >
-          <span className="skew-x-[15deg] bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 group-hover:bg-[#e60012] group-hover:scale-110 transition-transform">
+          <span className="skew-x-15 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 group-hover:bg-[#e60012] group-hover:scale-110 transition-transform">
             G
           </span>
-          <span className="skew-x-[15deg] block tracking-wider">GitHub</span>
+          <span className="skew-x-15 block tracking-wider">GitHub</span>
         </a>
       </motion.div>
 
@@ -182,8 +182,8 @@ export default function ProfileSection() {
         className="absolute bottom-8 right-8 text-white font-bold italic text-xl tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.8)] z-40"
       >
         <span className="opacity-70 mr-4">CLOCK_SYNC</span>
-        <span className="font-mono text-2xl bg-[#050505] px-3 py-1 -skew-x-[15deg] inline-block shadow-[3px_3px_0_#00e5ff] border border-white/20">
-          <span className="skew-x-[15deg] block">
+        <span className="font-mono text-2xl bg-[#050505] px-3 py-1 -skew-x-15 inline-block shadow-[3px_3px_0_#00e5ff] border border-white/20">
+          <span className="skew-x-15 block">
             {loginTime || "LOADING..."}
           </span>
         </span>

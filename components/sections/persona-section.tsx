@@ -35,7 +35,7 @@ export default function PersonaSection() {
       opacity: 1,
       x: 0,
       filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 400, damping: 30 },
+      transition: { type: "spring" as const, stiffness: 400, damping: 30 },
     },
   };
 
@@ -60,7 +60,7 @@ export default function PersonaSection() {
 
       {/* Left Column: Menu Items */}
       <div className="w-[45%] flex flex-col relative z-20 h-[70vh] pl-10 mt-10">
-        <div className="flex flex-col gap-1 w-full max-w-[500px] overflow-y-auto custom-scrollbar pr-4">
+        <div className="flex flex-col gap-1 w-full max-w-125 overflow-y-auto custom-scrollbar pr-4">
           {dummyDatabase.map((item, index) => {
             const isSelected = hoveredIndex === index;
 
@@ -76,10 +76,10 @@ export default function PersonaSection() {
                 }`}
               >
                 {isSelected && (
-                  <div className="absolute top-0 left-[-2rem] right-0 h-1 bg-[#ff003c]" />
+                  <div className="absolute top-0 -left-8 right-0 h-1 bg-[#ff003c]" />
                 )}
                 <div
-                  className={`w-[120px] text-center font-bold italic px-2 py-0.5 ml-2 mr-4 ${
+                  className={`w-30 text-center font-bold italic px-2 py-0.5 ml-2 mr-4 ${
                     isSelected
                       ? "bg-[#00f0ff] text-black"
                       : "bg-black/60 text-[#4deeea]"

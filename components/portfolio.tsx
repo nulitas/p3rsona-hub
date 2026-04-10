@@ -45,13 +45,13 @@ export default function Portfolio() {
       opacity: 1,
       scale: 1,
       filter: "blur(0px)",
-      transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.1 },
+      transition: { duration: 0.6, ease: "easeOut" as const, staggerChildren: 0.1 },
     },
     exit: {
       opacity: 0,
       scale: 0.9,
       filter: "blur(10px)",
-      transition: { duration: 0.4, ease: "easeIn" },
+      transition: { duration: 0.4, ease: "easeIn" as const },
     },
   };
 
@@ -61,12 +61,12 @@ export default function Portfolio() {
     enter: {
       opacity: 1,
       clipPath: "circle(150% at 50% 50%)",
-      transition: { duration: 0.8, ease: "easeOut" },
+      transition: { duration: 0.8, ease: "easeOut" as const },
     },
     exit: {
       opacity: 0,
       clipPath: "circle(0% at 50% 50%)",
-      transition: { duration: 0.5, ease: "easeIn" },
+      transition: { duration: 0.5, ease: "easeIn" as const },
     },
   };
 
@@ -82,7 +82,7 @@ export default function Portfolio() {
               clipPath: "circle(0% at 50% 50%)",
               transition: { duration: 1, ease: "easeInOut" },
             }}
-            className="absolute inset-0 z-[999] bg-[#00f0ff] flex items-center justify-center pointer-events-none"
+            className="absolute inset-0 z-999 bg-[#00f0ff] flex items-center justify-center pointer-events-none"
           >
             <motion.div
               animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
@@ -96,17 +96,17 @@ export default function Portfolio() {
       </AnimatePresence>
 
       {/* 2. Global Environment (Deep blue gradient matching the image) */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-tr from-[#021bc9] via-[#053df5] to-[#4deeea]" />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-linear-to-tr from-[#021bc9] via-[#053df5] to-[#4deeea]" />
 
       {/* Top Right Animated Water Ripples (Surface Reflection) */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[50%] z-[1] pointer-events-none overflow-hidden mix-blend-screen opacity-90">
+      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[50%] z-1 pointer-events-none overflow-hidden mix-blend-screen opacity-90">
         <motion.div
-          className="absolute right-[10%] top-[10%] w-[80%] h-[80%] rounded-[40%] bg-gradient-to-tr from-transparent to-white/40 border-t-4 border-white blur-[2px]"
+          className="absolute right-[10%] top-[10%] w-[80%] h-[80%] rounded-[40%] bg-linear-to-tr from-transparent to-white/40 border-t-4 border-white blur-[2px]"
           animate={{ rotate: 360, scale: [1, 1.1, 1] }}
           transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute right-[5%] top-[5%] w-[90%] h-[90%] rounded-[45%] bg-gradient-to-r from-transparent to-[#00f0ff]/30 border-r-8 border-[#00f0ff] blur-[4px] opacity-70"
+          className="absolute right-[5%] top-[5%] w-[90%] h-[90%] rounded-[45%] bg-linear-to-r from-transparent to-[#00f0ff]/30 border-r-8 border-[#00f0ff] blur-xs opacity-70"
           animate={{ rotate: -360, scale: [1, 1.2, 1] }}
           transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
         />
@@ -118,7 +118,7 @@ export default function Portfolio() {
       </div>
 
       {/* 3. Floating Animated Water Droplets (Right Side) */}
-      <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none z-[5] overflow-hidden">
+      <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none z-5 overflow-hidden">
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={`droplet-${i}`}
@@ -180,7 +180,7 @@ export default function Portfolio() {
               <motion.img
                 src="/avatar.png"
                 alt="Protagonist"
-                className="w-full h-auto object-contain opacity-90 rotate-[180deg]"
+                className="w-full h-auto object-contain opacity-90 rotate-180"
                 style={{
                   filter:
                     "sepia(1) hue-rotate(180deg) saturate(400%) brightness(1.2) contrast(1.1) drop-shadow(10px -10px 30px rgba(0,240,255,0.6))",
@@ -214,14 +214,14 @@ export default function Portfolio() {
             {/* Sub-section Back Button */}
             <button
               onClick={() => setActiveSection("none")}
-              className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center z-50 px-6 py-3 bg-white text-black font-black text-xl italic -skew-x-[15deg] hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
+              className="absolute top-6 left-6 md:top-8 md:left-8 flex items-center z-50 px-6 py-3 bg-white text-black font-black text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
             >
-              <div className="skew-x-[15deg] uppercase tracking-wider">
+              <div className="skew-x-15 uppercase tracking-wider">
                 &lt; BACK
               </div>
             </button>
 
-            <div className="w-full h-full max-w-[1400px] mx-auto relative mt-20 md:mt-16 overflow-hidden rounded-xl border border-white/10 shadow-2xl bg-black/20">
+            <div className="w-full h-full max-w-350 mx-auto relative mt-20 md:mt-16 overflow-hidden rounded-xl border border-white/10 shadow-2xl bg-black/20">
               {activeSection === "profile" && <ProfileSection />}
               {activeSection === "projects" && <ProjectsSection />}
               {activeSection === "system" && <SystemSection />}

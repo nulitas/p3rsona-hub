@@ -71,7 +71,7 @@ export default function SystemSection() {
     show: {
       opacity: 1,
       x: 0,
-      transition: { type: "spring", stiffness: 300, damping: 25 },
+      transition: { type: "spring" as const, stiffness: 300, damping: 25 },
     },
   };
 
@@ -85,7 +85,7 @@ export default function SystemSection() {
       {/* Background styling to match the Tutorial screen (Diagonal split) */}
       <div className="absolute top-0 left-0 w-full h-24 bg-white/10 z-0 border-b border-white/20"></div>
       <div
-        className="absolute top-0 right-0 w-[65%] h-[150%] bg-[#121ebb]/80 z-0 origin-bottom-left border-l-[8px] border-[#00f0ff]"
+        className="absolute top-0 right-0 w-[65%] h-[150%] bg-[#121ebb]/80 z-0 origin-bottom-left border-l-8 border-[#00f0ff]"
         style={{
           clipPath: "polygon(15% 0, 100% 0, 100% 100%, 0 100%)",
           transform: "skewX(-15deg)",
@@ -123,7 +123,7 @@ export default function SystemSection() {
       </motion.div>
 
       {/* Main Bulleted List Area */}
-      <div className="flex flex-col w-full max-w-[1200px] z-10 mt-12 px-[5vw] pl-[8vw] md:pl-[12vw]">
+      <div className="flex flex-col w-full max-w-300 z-10 mt-12 px-[5vw] pl-[8vw] md:pl-[12vw]">
         <div className="flex flex-col gap-1 w-full md:w-[80%]">
           {systemEntries.map((entry, index) => {
             const isActive = entry.type === "audio";
@@ -132,14 +132,14 @@ export default function SystemSection() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                className={`relative w-full flex items-center font-sans transition-all px-4 py-3 min-h-[4rem] ${
+                className={`relative w-full flex items-center font-sans transition-all px-4 py-3 min-h-16 ${
                   isActive
                     ? "bg-white text-black z-20 shadow-[0_4px_10px_rgba(0,0,0,0.5)] scale-[1.01]"
                     : "bg-transparent text-[#00f0ff] z-10 cursor-default"
                 }`}
               >
                 {isActive && (
-                  <div className="absolute top-0 right-0 w-full h-[3px] bg-[#ff003c]/80"></div>
+                  <div className="absolute top-0 right-0 w-full h-0.75 bg-[#ff003c]/80"></div>
                 )}
 
                 <div
@@ -228,7 +228,7 @@ export default function SystemSection() {
                 </div>
 
                 {isActive && (
-                  <div className="absolute top-0 right-0 h-full w-[6px] bg-[#121ebb]"></div>
+                  <div className="absolute top-0 right-0 h-full w-1.5 bg-[#121ebb]"></div>
                 )}
               </motion.div>
             );

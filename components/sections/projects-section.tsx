@@ -25,7 +25,7 @@ export default function ProjectsSection() {
       opacity: 1,
       x: 0,
       filter: "blur(0px)",
-      transition: { type: "spring", stiffness: 400, damping: 30 },
+      transition: { type: "spring" as const, stiffness: 400, damping: 30 },
     },
   };
 
@@ -131,7 +131,7 @@ export default function ProjectsSection() {
                 {/* Status Badge */}
                 <div className="w-[20%] flex justify-center">
                   <div
-                    className={`flex items-center border-[2px] font-black italic tracking-tighter px-2 py-0.5 text-xs w-full max-w-[120px] justify-center ${
+                    className={`flex items-center border-2 font-black italic tracking-tighter px-2 py-0.5 text-xs w-full max-w-30 justify-center ${
                       isHovered
                         ? "bg-[#050505] text-white border-black"
                         : "bg-[#00f0ff] text-black border-[#00f0ff]"

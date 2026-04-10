@@ -1,7 +1,5 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
 import { Outfit } from "next/font/google";
 import { Suspense } from "react";
@@ -28,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`font-sans ${GeistSans.variable} ${GeistMono.variable} ${outfit.variable}`}
+        className={`font-sans ${outfit.variable}`}
       >
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
@@ -36,3 +34,4 @@ export default function RootLayout({
     </html>
   );
 }
+

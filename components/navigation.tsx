@@ -135,7 +135,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
           {/* The active jagged polygon backgrounds (only visible on hover/active) */}
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-0">
             {/* Pink jagged outline (smallest offset at bottom right) */}
-            <div className="absolute top-[15%] left-[5%] w-[100%] h-[90%] bg-[#ff00ff] clip-polygon-white" />
+            <div className="absolute top-[15%] left-[5%] w-full h-[90%] bg-[#ff00ff] clip-polygon-white" />
             {/* White jagged outline */}
             <div className="absolute top-[10%] left-[-5%] w-[110%] h-[90%] bg-white clip-polygon-white" />
             {/* Red slashed cursor triangle */}

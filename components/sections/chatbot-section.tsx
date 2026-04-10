@@ -246,7 +246,7 @@ export default function ChatbotSection() {
     show: {
       opacity: 1,
       x: 0,
-      transition: { type: "spring", stiffness: 350, damping: 25 },
+      transition: { type: "spring" as const, stiffness: 350, damping: 25 },
     },
   };
 
@@ -282,7 +282,7 @@ export default function ChatbotSection() {
       >
         <div
           ref={chatHistoryRef}
-          className="flex-grow overflow-y-auto pr-4 pt-16 custom-scrollbar flex flex-col gap-8 pb-10"
+          className="grow overflow-y-auto pr-4 pt-16 custom-scrollbar flex flex-col gap-8 pb-10"
         >
           <AnimatePresence>
             {messages.map((message, index) => (
@@ -296,7 +296,7 @@ export default function ChatbotSection() {
                   /* Velvet Room Igor Dialogue Box */
                   <div className="relative">
                     {/* Floating Igor Face for the Dialogue Box */}
-                    <div className="absolute -left-[5rem] md:-left-[8rem] bottom-0 w-[6rem] md:w-[10rem] h-[8rem] md:h-[12rem] z-20 pointer-events-none drop-shadow-2xl">
+                    <div className="absolute -left-20 md:-left-32 bottom-0 w-24 md:w-40 h-32 md:h-48 z-20 pointer-events-none drop-shadow-2xl">
                       <img
                         src="/igor.png"
                         alt="Igor"
@@ -305,8 +305,8 @@ export default function ChatbotSection() {
                     </div>
 
                     {/* Dialogue Box Name Plate */}
-                    <div className="absolute -top-6 left-[-1rem] bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
-                      <span className="skew-x-[10deg] block font-bold text-[#00f0ff] text-sm md:text-base tracking-wide">
+                    <div className="absolute -top-6 -left-4 bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
+                      <span className="skew-x-10 block font-bold text-[#00f0ff] text-sm md:text-base tracking-wide">
                         Igor
                         <div className="text-[0.55rem] text-[#00f0ff] uppercase tracking-widest opacity-80 -mt-1">
                           Talk
@@ -315,7 +315,7 @@ export default function ChatbotSection() {
                     </div>
 
                     {/* Blue Dialogue Bubble */}
-                    <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-[6rem] border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed pr-10">
+                    <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-24 border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed pr-10">
                       {renderMessageWithLinks(message.text)}
                       {/* Blinking arrow indicator */}
                       <div
@@ -348,8 +348,8 @@ export default function ChatbotSection() {
               className="relative max-w-[90%] md:max-w-[75%] self-start ml-[5vw] md:ml-[10vw] mt-6"
             >
               <div className="relative">
-                <div className="absolute -top-6 left-[-1rem] bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
-                  <span className="skew-x-[10deg] block font-bold text-[#00f0ff] text-sm md:text-base tracking-wide">
+                <div className="absolute -top-6 -left-4 bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
+                  <span className="skew-x-10 block font-bold text-[#00f0ff] text-sm md:text-base tracking-wide">
                     Igor
                     <div className="text-[0.55rem] text-[#00f0ff] uppercase tracking-widest opacity-80 -mt-1">
                       Thinking
@@ -357,7 +357,7 @@ export default function ChatbotSection() {
                   </span>
                 </div>
 
-                <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-[6rem] border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed flex items-center gap-2">
+                <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 pt-8 pb-8 min-h-24 border-l-8 border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white font-medium text-lg leading-relaxed flex items-center gap-2">
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></span>
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></span>
                   <span className="w-3 h-3 bg-white rounded-full animate-bounce"></span>
@@ -413,7 +413,7 @@ export default function ChatbotSection() {
               initial={{ scale: 0.9, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.9, y: 20, opacity: 0 }}
-              className="bg-[#03068e]/95 border-2 border-[#00f0ff] p-8 max-w-md w-full shadow-[15px_15px_0_rgba(0,0,0,0.8)] skew-x-[-2deg] relative"
+              className="bg-[#03068e]/95 border-2 border-[#00f0ff] p-8 max-w-md w-full shadow-[15px_15px_0_rgba(0,0,0,0.8)] -skew-x-2 relative"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-[#00f0ff]" />
               <h2 className="text-2xl font-black italic text-white uppercase tracking-wider mb-4 mt-2">

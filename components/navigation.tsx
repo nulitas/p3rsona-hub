@@ -2,12 +2,15 @@
 
 import type { Section } from "./portfolio";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 interface NavigationProps {
   onSectionChange: (section: Section) => void;
 }
 
 export default function Navigation({ onSectionChange }: NavigationProps) {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
   // Web Audio Synthesis for Hover Sound (High-pitched metallic click)
   const playHoverSound = () => {
     try {
@@ -109,6 +112,30 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
     },
   ];
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowUp") {
+        setActiveIndex((prev) => {
+          const next = Math.max(0, prev - 1);
+          if (next !== prev) playHoverSound();
+          return next;
+        });
+      } else if (e.key === "ArrowDown") {
+        setActiveIndex((prev) => {
+          const next = Math.min(navItems.length - 1, prev + 1);
+          if (next !== prev) playHoverSound();
+          return next;
+        });
+      } else if (e.key === "Enter") {
+        playClickSound();
+        onSectionChange(navItems[activeIndex].key);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeIndex, onSectionChange, navItems]);
+
   return (
     <nav className="flex flex-col -mt-10 relative z-50 origin-center justify-center">
       {navItems.map(({ key, label, layoutClass, zIndex }, i) => (
@@ -122,32 +149,66 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
             stiffness: 400,
             damping: 20,
           }}
-          onMouseEnter={playHoverSound}
+          onMouseEnter={() => {
+            if (activeIndex !== i) playHoverSound();
+            setActiveIndex(i);
+          }}
           onClick={() => {
             playClickSound();
             onSectionChange(key);
           }}
-          // Use negative margins to make the words barely overlap exactly like the image
-          className={`group relative text-center md:text-left cursor-pointer outline-none block -mt-1 md:-mt-2 ${layoutClass} ${zIndex}`}
+          className={`relative cursor-pointer outline-none block -mt-1 md:-mt-2 ${layoutClass} ${zIndex}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {/* The active jagged polygon backgrounds (only visible on hover/active) */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-0">
-            {/* Pink jagged outline (smallest offset at bottom right) */}
-            <div className="absolute top-[15%] left-[5%] w-full h-[90%] bg-[#ff00ff] clip-polygon-white" />
-            {/* White jagged outline */}
-            <div className="absolute top-[10%] left-[-5%] w-[110%] h-[90%] bg-white clip-polygon-white" />
-            {/* Red slashed cursor triangle */}
-            <div className="absolute top-[5%] left-[-5%] w-[110%] h-[90%] bg-[#ff003c] clip-polygon-red" />
-          </div>
+          <div className="relative font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter w-full block text-center md:text-left">
+            {/* 1. Base Spacer (Invisible) to secure layout dimensions */}
+            <div className="px-4 opacity-0 pointer-events-none">{label}</div>
 
-          {/* The Huge Text Label */}
-          <div
-            className={`relative z-10 font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter transition-all duration-300 drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)] 
-              text-[#4deeea] group-hover:text-black group-hover:drop-shadow-none px-4`}
-          >
-            {label}
+            {/* 2. Inactive State (Cyan Text) */}
+            <div
+              className={`absolute inset-0 px-4 flex items-center justify-center md:justify-start transition-opacity duration-200 ${activeIndex === i ? "opacity-0" : "opacity-100 text-[#4deeea] drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)]"}`}
+            >
+              {label}
+            </div>
+
+            {/* 3. Active State (Red/Black Text + Polygon Layers) */}
+            <div
+              className={`absolute inset-0 transition-opacity duration-200 ${activeIndex === i ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+            >
+              {/* 3a. Pink Idle Background (Snug fit) */}
+              <motion.div
+                className="absolute -inset-x-[30px] -inset-y-[5px] bg-[#ff00ff] clip-polygon-white translate-x-[4px] translate-y-[8px]"
+                animate={
+                  activeIndex === i
+                    ? {
+                        x: ["4px", "2px", "5px", "3px", "4px"],
+                        y: ["8px", "9px", "7px", "8px", "8px"],
+                      }
+                    : {}
+                }
+                transition={{
+                  duration: 0.25,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+
+              {/* 3b. White Background */}
+              <div className="absolute -inset-x-[30px] -inset-y-[5px] bg-white clip-polygon-white -translate-x-[4px]" />
+
+              {/* 3c. RED Base Text (Shows where it spills outside the red polygon!) */}
+              <div className="absolute inset-x-0 inset-y-0 px-4 flex items-center justify-center md:justify-start text-black">
+                {label}
+              </div>
+
+              {/* 3d. RED Background with matching BLACK Text inside, perfectly clipped together */}
+              <div className="absolute -inset-x-[15px] -inset-y-[5px] bg-white clip-polygon-red flex items-center justify-center md:justify-start px-[15px] z-10">
+                <div className="px-4 text-red-500  w-full text-center md:text-left">
+                  {label}
+                </div>
+              </div>
+            </div>
           </div>
         </motion.button>
       ))}

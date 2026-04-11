@@ -29,33 +29,50 @@ export default function SystemSection() {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
 
+  // Sync state with localStorage on mount
   useEffect(() => {
-    const audio = document.getElementById("global-bgm") as HTMLAudioElement;
-    if (audio) {
-      setVolume(audio.volume);
-      setIsMuted(audio.muted);
+    if (typeof window !== "undefined") {
+      const storedVol = localStorage.getItem("bgm_volume");
+      if (storedVol !== null) setVolume(parseFloat(storedVol));
+      const storedMute = localStorage.getItem("bgm_muted");
+      if (storedMute !== null) setIsMuted(storedMute === "true");
     }
   }, []);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseFloat(e.target.value);
     setVolume(val);
-    const audio = document.getElementById("global-bgm") as HTMLAudioElement;
-    if (audio) {
-      audio.volume = val;
-      if (val > 0 && isMuted) {
-        setIsMuted(false);
-        audio.muted = false;
-      }
+    if (typeof window !== "undefined") {
+      localStorage.setItem("bgm_volume", val.toString());
+    }
+    
+    // Immediately apply to any currently playing background track without breaking crossfade logic
+    const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+    if (audioMain && audioMain.volume > 0) audioMain.volume = val;
+    
+    const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+    if (audioVelvet && audioVelvet.volume > 0) audioVelvet.volume = val;
+
+    if (val > 0 && isMuted) {
+      setIsMuted(false);
+      if (typeof window !== "undefined") localStorage.setItem("bgm_muted", "false");
+      if (audioMain) audioMain.muted = false;
+      if (audioVelvet) audioVelvet.muted = false;
     }
   };
 
   const toggleMute = () => {
-    const audio = document.getElementById("global-bgm") as HTMLAudioElement;
-    if (audio) {
-      audio.muted = !isMuted;
-      setIsMuted(!isMuted);
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("bgm_muted", newMuted.toString());
     }
+    
+    const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+    if (audioMain) audioMain.muted = newMuted;
+    
+    const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+    if (audioVelvet) audioVelvet.muted = newMuted;
   };
 
   const containerVariants = {

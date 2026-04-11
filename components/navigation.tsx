@@ -153,9 +153,15 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
             if (activeIndex !== i) playHoverSound();
             setActiveIndex(i);
           }}
-          onClick={() => {
-            playClickSound();
-            onSectionChange(key);
+          onClick={(e) => {
+            if (activeIndex !== i) {
+              e.preventDefault();
+              if (activeIndex !== i) playHoverSound();
+              setActiveIndex(i);
+            } else {
+              playClickSound();
+              onSectionChange(key);
+            }
           }}
           className={`relative cursor-pointer outline-none block -mt-1 md:-mt-2 ${layoutClass} ${zIndex}`}
           whileHover={{ scale: 1.05 }}

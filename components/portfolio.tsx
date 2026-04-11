@@ -74,14 +74,31 @@ export default function Portfolio() {
       activeSection === "chatbot" ||
       doorState === "enter1" ||
       doorState === "enter2";
+
+    // Read user's explicit volume preference
+    let masterVolume = 1;
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("bgm_volume");
+      if (stored !== null) masterVolume = parseFloat(stored);
+    }
+
     if (isVelvet) {
       if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, 0);
-      if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, 1);
+      if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, masterVolume);
     } else {
-      if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, 1);
+      if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, masterVolume);
       if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, 0);
     }
   }, [activeSection, showSplash, doorState]);
+
+  // Sync muted state on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isMuted = localStorage.getItem("bgm_muted") === "true";
+      if (mainMenuAudioRef.current) mainMenuAudioRef.current.muted = isMuted;
+      if (velvetAudioRef.current) velvetAudioRef.current.muted = isMuted;
+    }
+  }, []);
 
   const handleSectionChange = (section: Section) => {
     if (section === "chatbot" && activeSection !== "chatbot") {

@@ -99,11 +99,11 @@ export default function Portfolio() {
       if (mainMenuAudioRef.current) mainMenuAudioRef.current.currentTime = 0;
       setDoorState("leave1");
       setTimeout(() => {
+        // Flash white and swap back to main menu instantly once the door finishes closing
         setActiveSection(section);
-
         setDoorState("leave2");
-        setTimeout(() => setDoorState("idle"), 1500);
-      }, 500); // quick flash to white
+        setTimeout(() => setDoorState("idle"), 1200);
+      }, 1000); // Give the door 1 full second to swing shut before flashing
     } else {
       setActiveSection(section);
     }
@@ -448,18 +448,13 @@ export default function Portfolio() {
             {/* Dark BG Overlay */}
             <motion.div
               className="absolute inset-0 bg-black"
-              initial={{ opacity: 0 }}
+              initial={{ opacity: doorState === "leave1" || doorState === "leave2" ? 1 : 0 }}
               animate={{
                 opacity:
-                  doorState === "enter2"
-                    ? 0
-                    : doorState === "leave2"
-                      ? [1, 1, 0]
-                      : 1,
+                  doorState === "enter2" || doorState === "leave2" ? 0 : 1,
               }}
               transition={{
-                duration: doorState === "leave2" ? 1.5 : 0.1,
-                times: doorState === "leave2" ? [0, 0.7, 1] : undefined,
+                duration: doorState === "leave2" ? 1.0 : 0.1,
               }}
             />
 
@@ -467,18 +462,13 @@ export default function Portfolio() {
             <motion.div
               className="relative w-full h-full flex flex-col items-center justify-center pointer-events-none"
               style={{ rotate: "-8deg", scale: 1.2 }}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: doorState === "leave1" || doorState === "leave2" ? 1 : 0 }}
               animate={{
                 opacity:
-                  doorState === "enter2"
-                    ? 0
-                    : doorState === "leave2"
-                      ? [1, 1, 0]
-                      : 1,
+                  doorState === "enter2" || doorState === "leave2" ? 0 : 1,
               }}
               transition={{
-                duration: doorState === "leave2" ? 1.5 : 0.3,
-                times: doorState === "leave2" ? [0, 0.7, 1] : undefined,
+                duration: doorState === "leave2" ? 0 : 0.3,
               }}
             >
               {/* Floor Line representing horizon */}
@@ -506,16 +496,16 @@ export default function Portfolio() {
                     boxShadow: "inset 0 0 20px rgba(0,0,0,0.8)",
                     border: "2px solid #4c8cff",
                   }}
-                  initial={{ rotateY: 0 }}
+                  initial={{ rotateY: doorState === "leave1" || doorState === "leave2" ? -120 : 0 }}
                   animate={{
                     rotateY:
-                      doorState === "enter1" || doorState === "leave1"
+                      doorState === "enter1"
                         ? -120
                         : 0,
                   }}
                   transition={{
                     duration: 1.0,
-                    ease: "circIn",
+                    ease: doorState === "leave1" ? "easeOut" : "circIn",
                     delay: doorState === "enter1" ? 0.3 : 0,
                   }}
                 >
@@ -538,9 +528,9 @@ export default function Portfolio() {
                     : doorState === "enter2"
                       ? [1, 1, 0]
                       : doorState === "leave1"
-                        ? [0, 1]
+                        ? 0
                         : doorState === "leave2"
-                          ? [1, 0, 0]
+                          ? [1, 1, 0]
                           : 0,
               }}
               transition={{
@@ -550,9 +540,9 @@ export default function Portfolio() {
                     : doorState === "enter2"
                       ? 1.2
                       : doorState === "leave1"
-                        ? 0.5
+                        ? 0
                         : doorState === "leave2"
-                          ? 1.5
+                          ? 1.2
                           : 0,
                 times:
                   doorState === "enter1"
@@ -560,7 +550,7 @@ export default function Portfolio() {
                     : doorState === "enter2"
                       ? [0, 0.4, 1]
                       : doorState === "leave2"
-                        ? [0, 0.33, 1]
+                        ? [0, 0.15, 1]
                         : undefined,
                 ease: "easeOut",
               }}

@@ -194,9 +194,6 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
                 }}
               />
 
-              {/* 3b. White Background */}
-              <div className="absolute -inset-x-[30px] -inset-y-[5px] bg-white clip-polygon-white -translate-x-[4px]" />
-
               {/* 3c. RED Base Text (Shows where it spills outside the red polygon!) */}
               <div className="absolute inset-x-0 inset-y-0 px-4 flex items-center justify-center md:justify-start text-black">
                 {label}
@@ -204,7 +201,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
 
               {/* 3d. RED Background with matching BLACK Text inside, perfectly clipped together */}
               <div className="absolute -inset-x-[15px] -inset-y-[5px] bg-white clip-polygon-red flex items-center justify-center md:justify-start px-[15px] z-10">
-                <div className="px-4 text-red-500  w-full text-center md:text-left">
+                <div className="px-4 text-red-500 w-full text-center md:text-left">
                   {label}
                 </div>
               </div>

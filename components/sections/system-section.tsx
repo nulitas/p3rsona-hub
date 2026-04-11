@@ -45,17 +45,22 @@ export default function SystemSection() {
     if (typeof window !== "undefined") {
       localStorage.setItem("bgm_volume", val.toString());
     }
-    
+
     // Immediately apply to any currently playing background track without breaking crossfade logic
-    const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+    const audioMain = document.getElementById(
+      "main-menu-bgm",
+    ) as HTMLAudioElement;
     if (audioMain && audioMain.volume > 0) audioMain.volume = val;
-    
-    const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+
+    const audioVelvet = document.getElementById(
+      "velvet-room-bgm",
+    ) as HTMLAudioElement;
     if (audioVelvet && audioVelvet.volume > 0) audioVelvet.volume = val;
 
     if (val > 0 && isMuted) {
       setIsMuted(false);
-      if (typeof window !== "undefined") localStorage.setItem("bgm_muted", "false");
+      if (typeof window !== "undefined")
+        localStorage.setItem("bgm_muted", "false");
       if (audioMain) audioMain.muted = false;
       if (audioVelvet) audioVelvet.muted = false;
     }
@@ -67,11 +72,15 @@ export default function SystemSection() {
     if (typeof window !== "undefined") {
       localStorage.setItem("bgm_muted", newMuted.toString());
     }
-    
-    const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+
+    const audioMain = document.getElementById(
+      "main-menu-bgm",
+    ) as HTMLAudioElement;
     if (audioMain) audioMain.muted = newMuted;
-    
-    const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+
+    const audioVelvet = document.getElementById(
+      "velvet-room-bgm",
+    ) as HTMLAudioElement;
     if (audioVelvet) audioVelvet.muted = newMuted;
   };
 

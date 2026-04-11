@@ -100,6 +100,76 @@ export default function Portfolio() {
     }
   }, []);
 
+  // Global Play/Pause (Spacebar & Double Tap)
+  useEffect(() => {
+    let lastTap = 0;
+
+    const toggleMusic = (e?: Event) => {
+      if (e && e.type === "keydown") {
+        const keyEvent = e as KeyboardEvent;
+        if (
+          keyEvent.target instanceof HTMLInputElement ||
+          keyEvent.target instanceof HTMLTextAreaElement
+        ) return;
+
+        if (keyEvent.code === "Space") {
+          keyEvent.preventDefault();
+        } else {
+          return;
+        }
+      }
+
+      if (e && (e.type === "touchstart" || e.type === "dblclick")) {
+        const target = e.target as HTMLElement;
+        if (target.closest(".nav-item")) return;
+      }
+
+      const isMuted = localStorage.getItem("bgm_muted") === "true";
+      const newMuted = !isMuted;
+      localStorage.setItem("bgm_muted", newMuted.toString());
+
+      const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+      if (audioMain) audioMain.muted = newMuted;
+      
+      const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+      if (audioVelvet) audioVelvet.muted = newMuted;
+
+      if (!newMuted) {
+          if (audioMain && audioMain.paused && activeSection !== "chatbot") audioMain.play().catch(()=>{});
+          if (audioVelvet && audioVelvet.paused && activeSection === "chatbot") audioVelvet.play().catch(()=>{});
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
+      toggleMusic(e);
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTap;
+      
+      if (tapLength < 500 && tapLength > 0) {
+        toggleMusic(e);
+      }
+      lastTap = currentTime;
+    };
+
+    const handleDoubleClick = (e: MouseEvent) => {
+       toggleMusic(e);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("dblclick", handleDoubleClick);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("dblclick", handleDoubleClick);
+    };
+  }, [activeSection]);
+
   const handleSectionChange = (section: Section) => {
     if (section === "chatbot" && activeSection !== "chatbot") {
       // ENTERING VELVET ROOM

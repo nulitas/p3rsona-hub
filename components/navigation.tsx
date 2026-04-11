@@ -163,11 +163,11 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
               onSectionChange(key);
             }
           }}
-          className={`relative cursor-pointer outline-none block -mt-1 md:-mt-2 ${layoutClass} ${zIndex}`}
+          className={`nav-item relative cursor-pointer outline-none inline-block self-center md:self-start -mt-1 md:-mt-2 ${layoutClass} ${zIndex}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="relative font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter w-full block text-center md:text-left">
+          <div className="relative font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter inline-block whitespace-nowrap text-center md:text-left">
             {/* 1. Base Spacer (Invisible) to secure layout dimensions */}
             <div className="px-4 opacity-0 pointer-events-none">{label}</div>
 
@@ -184,12 +184,12 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
             >
               {/* 3a. Pink Idle Background (Snug fit) */}
               <motion.div
-                className="absolute -inset-x-[30px] -inset-y-[5px] bg-[#ff00ff] clip-polygon-white translate-x-[4px] translate-y-[8px]"
+                className="absolute -inset-x-[30px] -inset-y-[5px] bg-[#ff00ff] clip-polygon-white"
                 animate={
                   activeIndex === i
                     ? {
-                        x: ["4px", "2px", "5px", "3px", "4px"],
-                        y: ["8px", "9px", "7px", "8px", "8px"],
+                        x: ["-2px", "1px", "-1px", "2px", "-2px"],
+                        y: ["1px", "3px", "2px", "4px", "1px"],
                       }
                     : {}
                 }

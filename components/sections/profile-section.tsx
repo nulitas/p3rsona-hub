@@ -43,7 +43,7 @@ export default function ProfileSection() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="flex flex-col h-full w-full relative z-10 p-0 pt-[10vh] md:pt-[15vh] font-sans italic bg-black/40 md:overflow-hidden overflow-y-auto overflow-x-hidden custom-scrollbar"
+      className="flex flex-col justify-start md:justify-center h-full w-full relative z-10 p-0 pt-[10vh] md:pt-0 font-sans italic bg-black/40 md:overflow-hidden overflow-y-auto overflow-x-hidden custom-scrollbar"
     >
       {/* Avatar on the right side */}
       <motion.img
@@ -61,7 +61,7 @@ export default function ProfileSection() {
 
       <motion.div
         variants={itemVariants}
-        className="relative z-10 w-[120%] lg:w-[130%] -ml-[10%] lg:-ml-[15%] mt-4 md:mt-12 lg:mt-16 transform md:-rotate-3 lg:-rotate-6"
+        className="relative z-10 w-[120%] lg:w-[130%] -ml-[10%] lg:-ml-[15%] mt-4 md:mt-0 transform md:-rotate-3 lg:-rotate-6"
       >
         {/* Action Links - Moved to the top */}
         <div className="flex gap-4 md:gap-6 mb-4 md:mb-6 mx-auto md:mx-0 ml-[15%] md:ml-[20%] lg:ml-[30%] relative z-30">

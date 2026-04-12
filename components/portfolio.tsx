@@ -455,13 +455,14 @@ export default function Portfolio() {
               initial={{ x: -200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="absolute opacity-20 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[5%] top-[5%] md:top-[-10%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
+              className="absolute opacity-20 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[12%] top-[5%] md:top-[-10%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
             >
               {/* 
                 We use an animated GIF with a transparent background. 
                 We apply CSS filters to tint the image perfectly into a P3 Reload cyan/blue style.
                 Framer motion adds a slow 'floating in water' breathing effect to the entire GIF. 
               */}
+
               <motion.img
                 src="/me.png"
                 alt="Protagonist"

@@ -167,13 +167,15 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="relative font-black text-5xl md:text-7xl lg:text-[8rem] leading-[0.85] uppercase tracking-tighter inline-block whitespace-nowrap text-center md:text-left">
+          <div className="relative font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[0.85] uppercase tracking-tighter inline-flex justify-start whitespace-nowrap text-center md:text-left">
             {/* 1. Base Spacer (Invisible) to secure layout dimensions */}
-            <div className="px-4 opacity-0 pointer-events-none">{label}</div>
+            <div className="px-4 opacity-0 pointer-events-none pb-2 xl:pb-4 pt-1">
+              {label}
+            </div>
 
             {/* 2. Inactive State (Cyan Text) */}
             <div
-              className={`absolute inset-0 px-4 flex items-center justify-center md:justify-start transition-opacity duration-200 ${activeIndex === i ? "opacity-0" : "opacity-100 text-[#4deeea] drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)]"}`}
+              className={`absolute inset-0 px-4 flex items-center justify-start transition-opacity duration-200 ${activeIndex === i ? "opacity-0" : "opacity-100 text-[#4deeea] drop-shadow-[2px_4px_0_rgba(0,0,0,0.3)]"}`}
             >
               {label}
             </div>
@@ -182,7 +184,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
             <div
               className={`absolute inset-0 transition-opacity duration-200 ${activeIndex === i ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             >
-              {/* 3a. Pink Idle Background (Snug fit) */}
+              {/* 3a. Pink Idle Background (Shoots endlessly right) */}
               <motion.div
                 className="absolute -inset-x-[30px] -inset-y-[5px] bg-[#ff00ff] clip-polygon-white"
                 animate={

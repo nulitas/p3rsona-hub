@@ -131,7 +131,7 @@ export default function SystemSection() {
       {/* Top Header Navigation Tabs */}
       <motion.div
         variants={itemVariants}
-        className="flex items-end justify-start gap-2 md:gap-4 mt-8 md:mt-12 px-[5vw] z-20 relative font-black italic"
+        className="flex items-end justify-start gap-2 md:gap-4 mt-4 md:mt-6 px-[5vw] z-20 relative font-black italic"
       >
         <div className="flex bg-white rounded-full items-center pl-2 pr-1 h-10 md:h-12 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
           {/* Active Tab */}

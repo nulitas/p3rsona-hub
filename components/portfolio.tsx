@@ -24,6 +24,68 @@ export default function Portfolio() {
     "idle" | "enter1" | "enter2" | "leave1" | "leave2"
   >("idle");
 
+  // Web Audio Synthesis for Hover Sound (High-pitched metallic click)
+  const playHoverSound = () => {
+    try {
+      const audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(
+        1200,
+        audioCtx.currentTime + 0.05,
+      );
+
+      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioCtx.currentTime + 0.05,
+      );
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.05);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Web Audio Synthesis for Click Sound (Deeper digital slice)
+  const playClickSound = () => {
+    try {
+      const audioCtx = new (
+        window.AudioContext || (window as any).webkitAudioContext
+      )();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.type = "sawtooth";
+      oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(
+        40,
+        audioCtx.currentTime + 0.2,
+      );
+
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.001,
+        audioCtx.currentTime + 0.2,
+      );
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.2);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const mainMenuAudioRef = useRef<HTMLAudioElement>(null);
   const velvetAudioRef = useRef<HTMLAudioElement>(null);
 
@@ -84,9 +146,11 @@ export default function Portfolio() {
 
     if (isVelvet) {
       if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, 0);
-      if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, masterVolume);
+      if (velvetAudioRef.current)
+        fadeAudio(velvetAudioRef.current, masterVolume);
     } else {
-      if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, masterVolume);
+      if (mainMenuAudioRef.current)
+        fadeAudio(mainMenuAudioRef.current, masterVolume);
       if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, 0);
     }
   }, [activeSection, showSplash, doorState]);
@@ -110,7 +174,8 @@ export default function Portfolio() {
         if (
           keyEvent.target instanceof HTMLInputElement ||
           keyEvent.target instanceof HTMLTextAreaElement
-        ) return;
+        )
+          return;
 
         if (keyEvent.code === "Space") {
           keyEvent.preventDefault();
@@ -128,15 +193,21 @@ export default function Portfolio() {
       const newMuted = !isMuted;
       localStorage.setItem("bgm_muted", newMuted.toString());
 
-      const audioMain = document.getElementById("main-menu-bgm") as HTMLAudioElement;
+      const audioMain = document.getElementById(
+        "main-menu-bgm",
+      ) as HTMLAudioElement;
       if (audioMain) audioMain.muted = newMuted;
-      
-      const audioVelvet = document.getElementById("velvet-room-bgm") as HTMLAudioElement;
+
+      const audioVelvet = document.getElementById(
+        "velvet-room-bgm",
+      ) as HTMLAudioElement;
       if (audioVelvet) audioVelvet.muted = newMuted;
 
       if (!newMuted) {
-          if (audioMain && audioMain.paused && activeSection !== "chatbot") audioMain.play().catch(()=>{});
-          if (audioVelvet && audioVelvet.paused && activeSection === "chatbot") audioVelvet.play().catch(()=>{});
+        if (audioMain && audioMain.paused && activeSection !== "chatbot")
+          audioMain.play().catch(() => {});
+        if (audioVelvet && audioVelvet.paused && activeSection === "chatbot")
+          audioVelvet.play().catch(() => {});
       }
     };
 
@@ -148,7 +219,7 @@ export default function Portfolio() {
     const handleTouchStart = (e: TouchEvent) => {
       const currentTime = new Date().getTime();
       const tapLength = currentTime - lastTap;
-      
+
       if (tapLength < 500 && tapLength > 0) {
         toggleMusic(e);
       }
@@ -156,7 +227,7 @@ export default function Portfolio() {
     };
 
     const handleDoubleClick = (e: MouseEvent) => {
-       toggleMusic(e);
+      toggleMusic(e);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -365,62 +436,6 @@ export default function Portfolio() {
       {/* 2. Global Environment (Deep blue gradient matching the image) */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-linear-to-tr from-[#021bc9] via-[#053df5] to-[#4deeea]" />
 
-      {/* Top Right Animated Water Ripples (Surface Reflection) */}
-      <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[50%] z-1 pointer-events-none overflow-hidden mix-blend-screen opacity-90">
-        <motion.div
-          className="absolute right-[10%] top-[10%] w-[80%] h-[80%] rounded-[40%] bg-linear-to-tr from-transparent to-white/40 border-t-4 border-white blur-[2px]"
-          animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute right-[5%] top-[5%] w-[90%] h-[90%] rounded-[45%] bg-linear-to-r from-transparent to-[#00f0ff]/30 border-r-8 border-[#00f0ff] blur-xs opacity-70"
-          animate={{ rotate: -360, scale: [1, 1.2, 1] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-        />
-        <motion.div
-          className="absolute right-[15%] top-[15%] w-[60%] h-[60%] rounded-[35%] bg-white blur-[60px] opacity-30"
-          animate={{ scale: [1, 1.3, 1] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
-
-      {/* 3. Floating Animated Water Droplets (Right Side) */}
-      <div className="absolute right-0 top-0 bottom-0 w-[40%] pointer-events-none z-5 overflow-hidden">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={`droplet-${i}`}
-            className="absolute rounded-[40%] border-2 border-white/20 mix-blend-overlay"
-            initial={{
-              opacity: 0,
-              scale: 0,
-              x: 50 + Math.random() * 200,
-              y: 200 + Math.random() * 500,
-            }}
-            animate={{
-              opacity: [0, 0.6, 0],
-              scale: [0, 2 + Math.random()],
-              y: [null, "-50px"],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 4,
-              repeat: Infinity,
-              delay: i * 1.5,
-              ease: "easeOut",
-            }}
-            style={{
-              width: `${100 + Math.random() * 150}px`,
-              height: `${100 + Math.random() * 150}px`,
-            }}
-          />
-        ))}
-        {/* Subtle right-side wave glow */}
-        <motion.div
-          className="absolute right-[-10%] top-[20%] w-[50%] h-[80%] rounded-[100%] bg-[#00f0ff] opacity-10 blur-[120px]"
-          animate={{ scale: [1, 1.3, 1], y: [0, -50, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </div>
-
       {/* Base background while splash is active to transition smoothly without white flash */}
       <div className="absolute inset-0 z-[-1] bg-[#000000] pointer-events-none" />
 
@@ -440,7 +455,7 @@ export default function Portfolio() {
               initial={{ x: -200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="absolute opacity-40 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[5%] top-[5%] md:top-[-10%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
+              className="absolute opacity-20 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[5%] top-[5%] md:top-[-10%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
             >
               {/* 
                 We use an animated GIF with a transparent background. 
@@ -448,7 +463,7 @@ export default function Portfolio() {
                 Framer motion adds a slow 'floating in water' breathing effect to the entire GIF. 
               */}
               <motion.img
-                src="/avatar.png"
+                src="/me.png"
                 alt="Protagonist"
                 className="w-full h-auto object-contain rotate-180"
                 style={{
@@ -483,7 +498,11 @@ export default function Portfolio() {
           >
             {/* Sub-section Back Button */}
             <button
-              onClick={() => handleSectionChange("none")}
+              onClick={() => {
+                playClickSound();
+                handleSectionChange("none");
+              }}
+              onMouseEnter={playHoverSound}
               className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center z-50 px-4 md:px-6 py-2 md:py-3 bg-white text-black font-black text-sm md:text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
             >
               <div className="skew-x-15 uppercase tracking-wider">
@@ -513,7 +532,11 @@ export default function Portfolio() {
           >
             {/* Sub-section Back Button */}
             <button
-              onClick={() => handleSectionChange("none")}
+              onClick={() => {
+                playClickSound();
+                handleSectionChange("none");
+              }}
+              onMouseEnter={playHoverSound}
               className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center z-50 px-4 md:px-6 py-2 md:py-3 bg-white text-black font-black text-sm md:text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
             >
               <div className="skew-x-15 uppercase tracking-wider">
@@ -535,7 +558,10 @@ export default function Portfolio() {
             {/* Dark BG Overlay */}
             <motion.div
               className="absolute inset-0 bg-black"
-              initial={{ opacity: doorState === "leave1" || doorState === "leave2" ? 1 : 0 }}
+              initial={{
+                opacity:
+                  doorState === "leave1" || doorState === "leave2" ? 1 : 0,
+              }}
               animate={{
                 opacity:
                   doorState === "enter2" || doorState === "leave2" ? 0 : 1,
@@ -549,7 +575,10 @@ export default function Portfolio() {
             <motion.div
               className="relative w-full h-full flex flex-col items-center justify-center pointer-events-none"
               style={{ rotate: "-8deg", scale: 1.2 }}
-              initial={{ opacity: doorState === "leave1" || doorState === "leave2" ? 1 : 0 }}
+              initial={{
+                opacity:
+                  doorState === "leave1" || doorState === "leave2" ? 1 : 0,
+              }}
               animate={{
                 opacity:
                   doorState === "enter2" || doorState === "leave2" ? 0 : 1,
@@ -583,12 +612,14 @@ export default function Portfolio() {
                     boxShadow: "inset 0 0 20px rgba(0,0,0,0.8)",
                     border: "2px solid #4c8cff",
                   }}
-                  initial={{ rotateY: doorState === "leave1" || doorState === "leave2" ? -120 : 0 }}
-                  animate={{
+                  initial={{
                     rotateY:
-                      doorState === "enter1"
+                      doorState === "leave1" || doorState === "leave2"
                         ? -120
                         : 0,
+                  }}
+                  animate={{
+                    rotateY: doorState === "enter1" ? -120 : 0,
                   }}
                   transition={{
                     duration: 1.0,

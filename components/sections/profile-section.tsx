@@ -50,21 +50,21 @@ export default function ProfileSection() {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-        src="/avatar.png"
+        src="/me.png"
         onError={(e) => {
           // Fallback if avatar.gif is not found
-          e.currentTarget.src = "/avatar.png";
+          e.currentTarget.src = "/me.png";
         }}
         alt="Avatar"
-        className="absolute right-[-20%] md:right-[-5%] bottom-0 h-[60%] md:h-[110%] opacity-30 md:opacity-100 w-auto object-contain z-0 md:z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
+        className="absolute right-[-20%] md:right-[-20%] bottom-0 md:top-20 h-[60%] md:h-[110%] opacity-30 md:opacity-100 w-auto object-contain z-0 md:z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
       />
 
       <motion.div
         variants={itemVariants}
-        className="relative z-10 w-full md:w-[150vw] md:-ml-[25vw] mt-4 md:mt-16 transform md:-rotate-6"
+        className="relative z-10 w-[120%] lg:w-[130%] -ml-[10%] lg:-ml-[15%] mt-4 md:mt-12 lg:mt-16 transform md:-rotate-3 lg:-rotate-6"
       >
         {/* Action Links - Moved to the top */}
-        <div className="flex gap-4 md:gap-6 mb-4 md:mb-6 mx-auto md:mx-0 md:ml-[32vw] relative z-30">
+        <div className="flex gap-4 md:gap-6 mb-4 md:mb-6 mx-auto md:mx-0 ml-[15%] md:ml-[20%] lg:ml-[30%] relative z-30">
           <a
             href="https://github.com/nulitas"
             target="_blank"
@@ -79,13 +79,15 @@ export default function ProfileSection() {
         </div>
 
         {/* Top Header Block: Name, Lv, HP, SP */}
-        <div className="bg-[#050505] text-white p-4 md:p-6 pb-6 md:pb-8 flex flex-col md:flex-row items-start md:items-end justify-start relative px-6 md:px-0 md:pl-[32vw]">
+        <div className="bg-[#050505] text-white p-4 md:p-6 pb-6 md:pb-8 flex flex-col md:flex-row items-start md:items-end justify-start relative px-6 md:px-0 pl-[15%] md:pl-[20%] lg:pl-[30%]">
           <div className="flex flex-col items-start leading-none pr-4 md:pr-8 mb-4 md:mb-0">
-            <span className="text-xl font-medium tracking-widest text-gray-300">
+            <span className="text-xl md:text-2xl font-medium tracking-widest text-gray-300">
               Andra R.
             </span>
-            <span className="text-4xl font-black mt-1">Pratama</span>
-            <div className="text-[11px] text-gray-400 mt-3 font-semibold tracking-widest">
+            <span className="text-4xl md:text-5xl font-black mt-1">
+              Pratama
+            </span>
+            <div className="text-[11px] md:text-[13px] text-gray-400 mt-3 font-semibold tracking-widest">
               NEXT EXP 2,030
             </div>
           </div>
@@ -94,12 +96,12 @@ export default function ProfileSection() {
             <span className="text-[#00e5ff] text-2xl md:text-4xl font-light">
               /Lv
             </span>
-            <span className="text-5xl md:text-6xl font-black leading-none tracking-tighter shadow-black drop-shadow-md">
+            <span className="text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tighter shadow-black drop-shadow-md">
               99
             </span>
           </div>
 
-          <div className="flex flex-col md:ml-16 gap-4 w-full md:w-60 pr-0 md:pr-4 mt-2">
+          <div className="flex flex-col md:ml-10 lg:ml-16 gap-4 w-full md:w-56 lg:w-60 pr-0 md:pr-4 mt-2">
             {/* HP */}
             <div className="flex flex-col relative w-full">
               <div className="flex justify-between items-end mb-1 font-bold">
@@ -132,38 +134,42 @@ export default function ProfileSection() {
         </div>
 
         {/* Thick black separator line to sell the 3D look (Hidden on mobile) */}
-        <div className="hidden md:block h-4 w-[150vw] bg-[#0a0a0a] relative z-20"></div>
+        <div className="hidden md:block h-3 lg:h-4 w-full bg-[#0a0a0a] relative z-20"></div>
 
         {/* Persona Info Block */}
-        <div className="p-6 md:p-8 pb-10 md:pb-16 px-6 md:px-0 md:pl-[32vw] md:pr-12 bg-white text-black relative">
-          <div className="flex items-center gap-2 md:gap-4 font-bold text-2xl md:text-3xl tracking-tighter mb-4 md:mb-6 relative z-10 w-full md:w-150 max-w-full">
-            <div className="w-4 h-4 md:w-6 md:h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] shrink-0"></div>
+        <div className="p-6 md:p-8 pb-10 md:pb-16 px-6 md:px-0 pl-[15%] md:pl-[20%] lg:pl-[30%] md:pr-12 bg-white text-black relative">
+          <div className="flex items-center gap-2 md:gap-4 font-bold text-2xl md:text-3xl lg:text-4xl tracking-tighter mb-4 md:mb-6 relative z-10 w-full md:w-auto max-w-full">
+            <div className="w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 bg-[#00e5ff] rotate-45 border-[3px] border-[#050505] shadow-[2px_2px_0_1px_#050505] shrink-0"></div>
             <span className="uppercase font-semibold tracking-wider opacity-80">
               Fool
             </span>
-            <span className="font-black text-2xl md:text-4xl ml-2 tracking-tight">
+            <span className="font-black text-2xl md:text-3xl lg:text-4xl ml-2 tracking-tight">
               Lv 99 Developer
             </span>
           </div>
 
           {/* Attack Type Swoosh */}
-          <div className="flex items-center gap-2 text-xl md:text-2xl font-black uppercase relative py-2 md:py-3 my-4 md:my-6 group w-full md:w-150 max-w-full">
+          <div className="flex items-center gap-2 text-xl md:text-2xl lg:text-3xl font-black uppercase relative py-2 md:py-3 my-4 md:my-6 group w-full md:w-auto max-w-full">
             {/* Orange background slash */}
-            <div className="absolute inset-y-0 -left-6 md:-left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[4px] md:border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
-            <span className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-2 md:pl-4 text-stroke-1">
+            <div className="absolute inset-y-0 -left-6 md:-left-24 lg:-left-32 w-[90%] bg-[#f58400] z-0 -skew-x-25 origin-left border-y-[4px] md:border-y-[6px] border-[#050505] h-[120%] top-[-10%] transition-transform group-hover:scale-y-110"></div>
+            <span className="relative z-10 text-white drop-shadow-[2px_2px_0_#000] tracking-widest outline-text pl-2 md:pl-4 text-stroke-1 whitespace-nowrap">
               Focus Area
             </span>
-            <span className="relative z-10 text-[#050505] font-black ml-6 tracking-tighter bg-white/80 px-2 skew-x-[8deg]">
+            <span className="relative z-10 text-[#050505] font-black ml-4 lg:ml-6 tracking-tighter bg-white/80 px-2 skew-x-[8deg]">
               AI Interfaces
             </span>
           </div>
 
           {/* Stats below */}
-          <div className="mt-6 md:mt-8 flex flex-wrap gap-4 md:gap-10 items-center text-lg md:text-2xl font-bold uppercase tracking-tight relative z-10 w-full md:w-150 max-w-full">
+          <div className="mt-6 md:mt-8 flex flex-wrap gap-4 md:gap-8 lg:gap-10 items-center text-lg md:text-2xl lg:text-3xl font-bold uppercase tracking-tight relative z-10 w-full md:w-auto max-w-full">
             <div className="flex items-center">
               Frontend{" "}
-              <span className="text-xl md:text-3xl ml-2 opacity-50">•</span>
-              <span className="font-black text-2xl md:text-4xl ml-2">177</span>
+              <span className="text-xl md:text-2xl lg:text-3xl ml-2 opacity-50">
+                •
+              </span>
+              <span className="font-black text-2xl md:text-3xl lg:text-4xl ml-2">
+                177
+              </span>
             </div>
             <div className="flex items-center">
               Backend{" "}

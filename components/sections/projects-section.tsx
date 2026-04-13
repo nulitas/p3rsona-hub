@@ -4,6 +4,194 @@ import { useState } from "react";
 import { projects } from "@/projects-data";
 import { motion } from "framer-motion";
 
+// ─── Flying Books Background ────────────────────────────────────────────────
+
+interface BookProps {
+  id: number;
+  x: number;       // % from left start
+  y: number;       // % from top start
+  size: number;    // px width
+  speed: number;   // seconds for full flight across screen
+  delay: number;   // animation delay seconds
+  rotate: number;  // initial rotation degrees
+  spin: number;    // degrees rotated per cycle
+  color: string;   // spine/cover accent color
+  opacity: number;
+  driftY: number;  // vertical drift px
+  pageColor: string;
+}
+
+function seededRand(seed: number) {
+  // simple LCG pseudo-random
+  const x = Math.sin(seed + 1) * 10000;
+  return x - Math.floor(x);
+}
+
+function generateBooks(count: number): BookProps[] {
+  const colors = ["#00f0ff", "#4deeea", "#0a52f4", "#4c8cff", "#b0e8ff", "#00c8ff"];
+  const pageColors = ["#c8eeff", "#d6f5ff", "#b0d4ff", "#e0f7ff"];
+  const books: BookProps[] = [];
+  for (let i = 0; i < count; i++) {
+    const r = (n: number) => seededRand(i * 37 + n);
+    books.push({
+      id: i,
+      x: r(0) * 120 - 10,       // -10% to 110% — some start off-screen
+      y: r(1) * 90 + 5,          // 5% to 95%
+      size: 28 + r(2) * 36,      // 28px to 64px
+      speed: 14 + r(3) * 22,     // 14s to 36s
+      delay: -(r(4) * 30),       // stagger with negative delay so they're pre-running
+      rotate: r(5) * 360 - 180,
+      spin: (r(6) > 0.5 ? 1 : -1) * (8 + r(7) * 24),
+      color: colors[Math.floor(r(8) * colors.length)],
+      pageColor: pageColors[Math.floor(r(9) * pageColors.length)],
+      opacity: 0.25 + r(10) * 0.35,
+      driftY: (r(11) > 0.5 ? 1 : -1) * (20 + r(12) * 60),
+    });
+  }
+  return books;
+}
+
+const BOOKS = generateBooks(18);
+
+function FlyingBook({ book }: { book: BookProps }) {
+  const spineW = Math.max(6, book.size * 0.18);
+  const bookH = book.size * 1.35;
+  const coverW = book.size - spineW;
+
+  // keyframe ids are unique per book
+  const flyId = `book-fly-${book.id}`;
+  const floatId = `book-float-${book.id}`;
+
+  return (
+    <>
+      <style>{`
+        @keyframes ${flyId} {
+          0%   { transform: translateX(0px) rotate(${book.rotate}deg); opacity: 0; }
+          5%   { opacity: ${book.opacity}; }
+          95%  { opacity: ${book.opacity}; }
+          100% { transform: translateX(${book.x > 50 ? "-130vw" : "130vw"}) rotate(${book.rotate + book.spin * 3}deg); opacity: 0; }
+        }
+        @keyframes ${floatId} {
+          0%   { margin-top: 0px; }
+          50%  { margin-top: ${book.driftY}px; }
+          100% { margin-top: 0px; }
+        }
+      `}</style>
+
+      <div
+        style={{
+          position: "absolute",
+          left: `${book.x}%`,
+          top: `${book.y}%`,
+          animation: `${flyId} ${book.speed}s linear ${book.delay}s infinite, ${floatId} ${book.speed * 0.6}s ease-in-out ${book.delay}s infinite`,
+          willChange: "transform, opacity",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      >
+        {/* Book body (cover + spine side by side) */}
+        <div
+          style={{
+            display: "flex",
+            width: book.size,
+            height: bookH,
+            filter: `drop-shadow(0 0 8px ${book.color}88) drop-shadow(0 0 20px ${book.color}44)`,
+          }}
+        >
+          {/* Spine */}
+          <div
+            style={{
+              width: spineW,
+              height: "100%",
+              background: `linear-gradient(180deg, ${book.color}cc, ${book.color}55)`,
+              borderRadius: "2px 0 0 2px",
+              boxShadow: `inset -2px 0 4px rgba(0,0,0,0.4), 0 0 6px ${book.color}`,
+              flexShrink: 0,
+            }}
+          />
+          {/* Cover */}
+          <div
+            style={{
+              width: coverW,
+              height: "100%",
+              background: `linear-gradient(135deg, ${book.color}22 0%, #05155c99 40%, #020b4f88 100%)`,
+              border: `1px solid ${book.color}55`,
+              borderLeft: "none",
+              borderRadius: "0 2px 2px 0",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {/* Cover lines (decorative page edges) */}
+            {[0.25, 0.5, 0.72].map((pos, li) => (
+              <div
+                key={li}
+                style={{
+                  position: "absolute",
+                  top: `${pos * 100}%`,
+                  left: "15%",
+                  right: "15%",
+                  height: "1px",
+                  background: `${book.color}44`,
+                }}
+              />
+            ))}
+            {/* Small glowing title block */}
+            <div
+              style={{
+                position: "absolute",
+                top: "18%",
+                left: "12%",
+                right: "12%",
+                height: Math.max(4, bookH * 0.06),
+                background: `${book.color}66`,
+                borderRadius: 1,
+                boxShadow: `0 0 6px ${book.color}`,
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Fanned pages peeking from the right edge */}
+        {[1, 2, 3].map((n) => (
+          <div
+            key={n}
+            style={{
+              position: "absolute",
+              top: `${3 + n * 2}px`,
+              right: `-${n * 1.5}px`,
+              width: 2,
+              height: bookH - (3 + n * 2) * 2,
+              background: book.pageColor,
+              opacity: 0.5 - n * 0.1,
+              borderRadius: 1,
+            }}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
+function FlyingBooksBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        overflow: "hidden",
+        pointerEvents: "none",
+        zIndex: 0,
+      }}
+    >
+      {BOOKS.map((book) => (
+        <FlyingBook key={book.id} book={book} />
+      ))}
+    </div>
+  );
+}
+
 export default function ProjectsSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
 
@@ -30,7 +218,8 @@ export default function ProjectsSection() {
   };
 
   const activeProject = projects[hoveredIndex] || projects[0];
-  const [activeProjectName, activeProjectDesc] = activeProject.name.split("–");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_activeProjectName, activeProjectDesc] = activeProject.name.split("–");
 
   return (
     <motion.div
@@ -39,6 +228,8 @@ export default function ProjectsSection() {
       animate="show"
       className="flex flex-col h-full w-full relative z-10 px-4 md:px-[10vw] pt-[5vh] text-white font-sans overflow-hidden"
     >
+      {/* ── Flying Books Background ───────────────────────────────── */}
+      <FlyingBooksBackground />
       {/* Top Header Navigation Tabs (Mocking the L / R requests tabs) */}
       <motion.div
         variants={itemVariants}
@@ -137,8 +328,9 @@ export default function ProjectsSection() {
                         : "bg-[#00f0ff] text-black border-[#00f0ff]"
                     }`}
                   >
-                    <span className="mr-0.5 md:mr-1 text-[10px] md:text-sm leading-none">✔</span>
-                    <span className="truncate">{project.status ? "Done" : "Dev"}</span>
+                    <span className="truncate">
+                      {project.status ? "Done" : "Dev"}
+                    </span>
                   </div>
                 </div>
               </motion.a>

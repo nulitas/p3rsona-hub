@@ -50,13 +50,13 @@ export default function ProfileSection() {
         initial={{ opacity: 0, x: 100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-        src="/me.png"
+        src="/avatar.png"
         onError={(e) => {
           // Fallback if avatar.gif is not found
-          e.currentTarget.src = "/me.png";
+          e.currentTarget.src = "/avatar.png";
         }}
         alt="Avatar"
-        className="absolute right-[-20%] md:right-[-20%] bottom-0 md:top-20 h-[60%] md:h-[110%] opacity-30 md:opacity-100 w-auto object-contain z-0 md:z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
+        className="hidden md:block absolute right-[-15%] md:right-[-10%] bottom-0 md:top-20 h-[50%] md:h-[85%] lg:h-[95%] w-auto object-contain z-0 md:z-20 pointer-events-none drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]"
       />
 
       <motion.div

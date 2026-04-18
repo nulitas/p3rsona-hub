@@ -3,6 +3,7 @@
 import { useState } from "react";
 import projects from "@/projects-data.json";
 import { motion } from "framer-motion";
+import { playHoverSound, playClickSound } from "../../lib/sounds";
 
 // ─── Flying Books Background ────────────────────────────────────────────────
 
@@ -286,8 +287,9 @@ export default function ProjectsSection() {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={() => setHoveredIndex(index)}
-                onFocus={() => setHoveredIndex(index)}
+                onMouseEnter={() => { setHoveredIndex(index); playHoverSound(); }}
+                onFocus={() => { setHoveredIndex(index); playHoverSound(); }}
+                onClick={playClickSound}
                 className={`flex items-center px-2 md:px-4 py-2 md:py-2 relative group cursor-pointer transition-all ${
                   isHovered
                     ? "bg-white text-black"

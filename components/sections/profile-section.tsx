@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { playHoverSound, playClickSound } from "../../lib/sounds";
 
 export default function ProfileSection() {
   const [loginTime, setLoginTime] = useState("");
@@ -69,6 +70,8 @@ export default function ProfileSection() {
             href="https://github.com/nulitas"
             target="_blank"
             rel="noopener noreferrer"
+            onMouseEnter={playHoverSound}
+            onClick={playClickSound}
             className="flex items-center justify-center gap-3 bg-white text-black text-center font-black italic px-8 py-3 text-2xl -skew-x-15 hover:bg-[#00e5ff] transition-colors border-4 border-[#050505] shadow-[6px_6px_0_rgba(0,0,0,0.7)] group"
           >
             <span className="skew-x-15 bg-black text-white w-8 h-8 rounded-full flex items-center justify-center text-sm mr-2 group-hover:bg-[#e60012] group-hover:scale-110 transition-transform">

@@ -1,5 +1,7 @@
 "use client"
 
+import { playHoverSound, playClickSound } from "../lib/sounds"
+
 interface WindowFooterProps {
   isDark: boolean
   onToggleTheme: () => void
@@ -9,11 +11,15 @@ export default function WindowFooter({ isDark, onToggleTheme }: WindowFooterProp
   return (
     <footer className="border-t-2 border-black dark:border-white p-3 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-2">
-        <button className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white px-3 py-1 text-sm">
+        <button 
+          onMouseEnter={playHoverSound}
+          onClick={playClickSound}
+          className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white px-3 py-1 text-sm">
           NULITAS
         </button>
         <button
-          onClick={onToggleTheme}
+          onMouseEnter={playHoverSound}
+          onClick={() => { playClickSound(); onToggleTheme(); }}
           className="bg-white dark:bg-black border-2 border-black dark:border-white text-black dark:text-white px-3 py-1 text-sm"
           aria-label="Toggle Theme"
         >

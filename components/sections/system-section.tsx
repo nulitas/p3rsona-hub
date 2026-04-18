@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { playHoverSound, playClickSound } from "../../lib/sounds";
 
 type Entry = { type: "text"; content: string } | { type: "audio" };
 
@@ -180,7 +181,8 @@ export default function SystemSection() {
 
                       <div className="flex items-center gap-2 md:gap-4 flex-1">
                         <button
-                          onClick={toggleMute}
+                          onMouseEnter={playHoverSound}
+                          onClick={() => { playClickSound(); toggleMute(); }}
                           className={`w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full border-2 transition-colors ${
                             isActive
                               ? "border-[#121ebb] hover:bg-[#121ebb] hover:text-white"

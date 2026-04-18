@@ -3,6 +3,7 @@
 import type { Section } from "./portfolio";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { playHoverSound, playClickSound } from "../lib/sounds";
 
 interface NavigationProps {
   onSectionChange: (section: Section) => void;
@@ -10,68 +11,6 @@ interface NavigationProps {
 
 export default function Navigation({ onSectionChange }: NavigationProps) {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
-  // Web Audio Synthesis for Hover Sound (High-pitched metallic click)
-  const playHoverSound = () => {
-    try {
-      const audioCtx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        1200,
-        audioCtx.currentTime + 0.05,
-      );
-
-      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioCtx.currentTime + 0.05,
-      );
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.05);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // Web Audio Synthesis for Click Sound (Deeper digital slice)
-  const playClickSound = () => {
-    try {
-      const audioCtx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.type = "sawtooth";
-      oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        40,
-        audioCtx.currentTime + 0.2,
-      );
-
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioCtx.currentTime + 0.2,
-      );
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.2);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   // Hardcoding rotation and translation offsets to create the "fanning" wave effect
   const navItems: {

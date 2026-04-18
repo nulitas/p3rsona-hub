@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { playHoverSound, playClickSound } from "../../lib/sounds";
 
 const skillDatabase = [
   { arcana: "Frontend", level: 99, name: "React.js", hue: 195, emoji: "⚛️" },
@@ -68,7 +69,8 @@ export default function PersonaSection() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseEnter={() => { setHoveredIndex(index); playHoverSound(); }}
+                onClick={playClickSound}
                 className={`relative flex items-center pr-4 cursor-pointer font-sans transition-all duration-100 ${
                   isSelected
                     ? "bg-white text-black py-1"

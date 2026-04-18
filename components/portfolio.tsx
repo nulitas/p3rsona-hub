@@ -8,6 +8,7 @@ import ProjectsSection from "./sections/projects-section";
 import SystemSection from "./sections/system-section";
 import PersonaSection from "./sections/persona-section";
 import ChatbotSection from "./sections/chatbot-section";
+import { playHoverSound, playClickSound } from "../lib/sounds";
 
 export type Section =
   | "profile"
@@ -24,75 +25,15 @@ export default function Portfolio() {
     "idle" | "enter1" | "enter2" | "leave1" | "leave2"
   >("idle");
 
-  // Web Audio Synthesis for Hover Sound (High-pitched metallic click)
-  const playHoverSound = () => {
-    try {
-      const audioCtx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        1200,
-        audioCtx.currentTime + 0.05,
-      );
-
-      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioCtx.currentTime + 0.05,
-      );
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.05);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // Web Audio Synthesis for Click Sound (Deeper digital slice)
-  const playClickSound = () => {
-    try {
-      const audioCtx = new (
-        window.AudioContext || (window as any).webkitAudioContext
-      )();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-
-      oscillator.type = "sawtooth";
-      oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(
-        40,
-        audioCtx.currentTime + 0.2,
-      );
-
-      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioCtx.currentTime + 0.2,
-      );
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.2);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const mainMenuAudioRef = useRef<HTMLAudioElement>(null);
   const velvetAudioRef = useRef<HTMLAudioElement>(null);
 
   // Splash Screen Timer
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 3500);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
 
   // Music Crossfader
@@ -248,7 +189,6 @@ export default function Portfolio() {
       setDoorState("enter1");
       setTimeout(() => {
         setActiveSection(section);
-
         setDoorState("enter2");
         setTimeout(() => setDoorState("idle"), 1000);
       }, 1500);

@@ -4,6 +4,7 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { generateChatResponse } from "@/lib/gemini-actions";
 import { motion, AnimatePresence } from "framer-motion";
+import { playHoverSound, playClickSound } from "../../lib/sounds";
 
 interface ChatMessage {
   text: string;
@@ -382,6 +383,8 @@ export default function ChatbotSection() {
 
           <button
             type="submit"
+            onMouseEnter={playHoverSound}
+            onClick={playClickSound}
             disabled={isLoading || !inputValue.trim()}
             className="bg-white hover:bg-[#00f0ff] text-black px-4 md:px-8 py-3 md:py-5 lg:py-6 font-black italic tracking-widest text-sm md:text-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all skew-x-[-5deg] shadow-[10px_10px_0_rgba(0,0,0,0.5)] hover:shadow-[-5px_10px_0_rgba(0,0,0,0.8)] z-20 shrink-0"
           >
@@ -390,7 +393,8 @@ export default function ChatbotSection() {
 
           <button
             type="button"
-            onClick={() => setShowResetModal(true)}
+            onMouseEnter={playHoverSound}
+            onClick={() => { playClickSound(); setShowResetModal(true); }}
             disabled={isLoading}
             className="bg-[#021bc9] hover:bg-[#ff003c] text-white px-3 md:px-6 py-3 md:py-5 lg:py-6 font-black tracking-widest cursor-pointer transition-all skew-x-[-5deg] shadow-[5px_5px_0_rgba(0,0,0,0.5)] z-20 shrink-0 border border-white/20"
             title="Reset Chat"
@@ -426,13 +430,15 @@ export default function ChatbotSection() {
 
               <div className="flex gap-4 justify-end font-black italic tracking-widest text-lg">
                 <button
-                  onClick={() => setShowResetModal(false)}
+                  onMouseEnter={playHoverSound}
+                  onClick={() => { playClickSound(); setShowResetModal(false); }}
                   className="px-6 py-3 border-2 border-[#00f0ff] text-[#00f0ff] hover:bg-[#00f0ff] hover:text-black transition-colors"
                 >
                   CANCEL
                 </button>
                 <button
-                  onClick={clearChat}
+                  onMouseEnter={playHoverSound}
+                  onClick={() => { playClickSound(); clearChat(); }}
                   className="px-6 py-3 bg-red-600 border-2 border-red-600 text-white hover:bg-white hover:text-red-600 hover:border-white transition-colors"
                 >
                   SEVER

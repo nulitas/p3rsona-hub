@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { projects } from "@/projects-data";
+import projects from "@/projects-data.json";
 import { motion } from "framer-motion";
 
 // ─── Flying Books Background ────────────────────────────────────────────────

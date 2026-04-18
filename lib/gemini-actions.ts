@@ -1,7 +1,9 @@
 "use server";
 
-import { PORTFOLIO_CONTEXT } from "@/prompts-data";
+import promptsData from "@/prompts-data.json";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const { PORTFOLIO_CONTEXT } = promptsData;
 
 const apiKey = process.env.GEMINI_API_KEY;
 

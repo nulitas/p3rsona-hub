@@ -32,4 +32,6 @@ next-env.d.ts
 
 projects-data.json
 prompts-data.json
+experience-data.json
+
 .vercel

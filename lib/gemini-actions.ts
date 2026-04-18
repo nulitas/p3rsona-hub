@@ -1,6 +1,6 @@
 "use server";
 
-import promptsData from "@/prompts-data.json";
+import promptsData from "@/data/prompts-data.json";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const { PORTFOLIO_CONTEXT } = promptsData;

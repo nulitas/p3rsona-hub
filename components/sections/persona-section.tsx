@@ -55,7 +55,7 @@ export default function PersonaSection() {
           transition={{ duration: 0.8 }}
           className="text-[5rem] sm:text-[7rem] md:text-[10rem] lg:text-[14rem] font-black italic tracking-tighter text-[#121ebb] opacity-90 leading-none drop-shadow-[5px_5px_0_rgba(0,0,0,0.1)]"
         >
-          PERSONA
+          TECHNOLOGIA
         </motion.div>
       </div>
 
@@ -69,7 +69,10 @@ export default function PersonaSection() {
               <motion.div
                 key={index}
                 variants={itemVariants}
-                onMouseEnter={() => { setHoveredIndex(index); playHoverSound(); }}
+                onMouseEnter={() => {
+                  setHoveredIndex(index);
+                  playHoverSound();
+                }}
                 onClick={playClickSound}
                 className={`relative flex items-center pr-4 cursor-pointer font-sans transition-all duration-100 ${
                   isSelected

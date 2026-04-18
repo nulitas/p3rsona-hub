@@ -33,7 +33,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
     },
     {
       key: "persona",
-      label: "PERSONA",
+      label: "TECHNOLOGIA",
       layoutClass: "rotate-2",
       zIndex: "z-[25]",
     },

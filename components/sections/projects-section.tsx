@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import projects from "@/projects-data.json";
 import { motion } from "framer-motion";
 import { playHoverSound, playClickSound } from "../../lib/sounds";
+import projects from "@/data/projects-data.json";
 
 // ─── Flying Books Background ────────────────────────────────────────────────
 

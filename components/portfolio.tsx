@@ -141,10 +141,14 @@ export default function Portfolio() {
   const mainMenuAudioRef = useRef<HTMLAudioElement>(null);
   const velvetAudioRef = useRef<HTMLAudioElement>(null);
 
-  // "Now Playing" chill widget: surfaces after idling on the main menu
+  // "Now Playing" chill widget: surfaces after idling on the main menu, but
+  // only once the theme has actually been unlocked (i.e. a menu section has
+  // been selected at least once this load) — otherwise it'd show a widget
+  // for a track that was never actually playing.
   const [chillMode, setChillMode] = useState(false);
   const [trackProgress, setTrackProgress] = useState({ current: 0, duration: 0 });
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const audioUnlockedRef = useRef(false);
 
   // Splash Screen Timer
   useEffect(() => {
@@ -240,7 +244,10 @@ export default function Portfolio() {
   // still on the main menu for a few seconds; any input dismisses it.
   useEffect(() => {
     const onMainMenu =
-      activeSection === "none" && !showSplash && doorState === "idle";
+      activeSection === "none" &&
+      !showSplash &&
+      doorState === "idle" &&
+      audioUnlockedRef.current;
 
     if (!onMainMenu) {
       setChillMode(false);
@@ -297,6 +304,25 @@ export default function Portfolio() {
   };
 
   const handleSectionChange = (section: Section) => {
+    audioUnlockedRef.current = true;
+
+    // Browsers block unmuted audio.play() until a real user gesture occurs.
+    // Selecting a menu section is that gesture, so retry playback for
+    // whichever theme should be active right here, synchronously in the
+    // click/Enter handler, instead of relying on the effect below alone.
+    const audioMain = document.getElementById(
+      "main-menu-bgm",
+    ) as HTMLAudioElement | null;
+    const audioVelvet = document.getElementById(
+      "velvet-room-bgm",
+    ) as HTMLAudioElement | null;
+    if (audioMain?.paused && section !== "chatbot") {
+      audioMain.play().catch(() => {});
+    }
+    if (audioVelvet?.paused && section === "chatbot") {
+      audioVelvet.play().catch(() => {});
+    }
+
     if (section === "chatbot" && activeSection !== "chatbot") {
       // ENTERING VELVET ROOM
       if (velvetAudioRef.current) velvetAudioRef.current.currentTime = 0;

@@ -79,6 +79,9 @@ function renderMessageWithLinks(text: string): React.ReactNode[] {
   });
 }
 
+// Set NEXT_PUBLIC_VELVET_PASSCODE in .env; leave it empty/unset to disable the gate entirely.
+const VELVET_PASSCODE = process.env.NEXT_PUBLIC_VELVET_PASSCODE ?? "";
+
 const BlueButterflies = () => {
   const butterflies = Array.from({ length: 10 }).map((_, i) => ({
     id: i,
@@ -145,6 +148,10 @@ export default function ChatbotSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const chatHistoryRef = useRef<HTMLDivElement>(null);
+
+  const [isLocked, setIsLocked] = useState(() => Boolean(VELVET_PASSCODE));
+  const [passcodeInput, setPasscodeInput] = useState("");
+  const [passcodeError, setPasscodeError] = useState(false);
 
   useEffect(() => {
     const savedMessages = localStorage.getItem("nulitas_cli_chat_history");
@@ -223,6 +230,19 @@ export default function ChatbotSection() {
     sendMessage(inputValue);
   };
 
+  const handlePasscodeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passcodeInput.trim().toUpperCase() === VELVET_PASSCODE.toUpperCase()) {
+      playClickSound();
+      setIsLocked(false);
+      setPasscodeError(false);
+    } else {
+      playClickSound();
+      setPasscodeError(true);
+      setPasscodeInput("");
+    }
+  };
+
   const clearChat = () => {
     setMessages([
       {
@@ -268,6 +288,71 @@ export default function ChatbotSection() {
       {/* Floating Butterflies Overlay */}
       <BlueButterflies />
 
+      {isLocked ? (
+        <motion.div
+          variants={itemVariants}
+          className="flex-1 flex flex-col items-center justify-center relative z-10 text-center px-4"
+        >
+          <h1 className="text-3xl md:text-5xl font-black m-0 tracking-tighter italic uppercase text-white drop-shadow-[0_4px_10px_rgba(0,240,255,0.6)] mb-10">
+            VELVET ROOM LINK
+          </h1>
+
+          <div className="relative w-full max-w-md">
+            <div className="absolute -top-6 -left-4 bg-[#021bc9] border-l-4 border-r-4 border-b-4 border-transparent border-t-4 border-t-[#00f0ff] px-6 py-1 skew-x-[-10deg] shadow-xl z-30">
+              <span className="skew-x-10 block font-bold text-[#00f0ff] text-sm md:text-base tracking-wide">
+                Igor
+                <div className="text-[0.55rem] text-[#00f0ff] uppercase tracking-widest opacity-80 -mt-1">
+                  Access Restricted
+                </div>
+              </span>
+            </div>
+
+            <div className="bg-[#03068e]/95 backdrop-blur-md rounded-t-lg rounded-br-lg p-6 md:p-8 pt-8 border-l-4 md:border-l-8 border-b-4 md:border-b-8 border-l-[#00f0ff] border-b-[#00f0ff] shadow-[10px_10px_0_rgba(0,0,0,0.5)] md:shadow-[15px_15px_0_rgba(0,0,0,0.5)] relative z-10 text-white">
+              <p className="font-medium text-sm md:text-lg leading-relaxed mb-6 text-left">
+                This door is bound by contract. State the passcode to enter.
+              </p>
+
+              <form onSubmit={handlePasscodeSubmit} className="flex flex-col gap-3">
+                <input
+                  type="password"
+                  value={passcodeInput}
+                  onChange={(e) => {
+                    setPasscodeInput(e.target.value);
+                    if (passcodeError) setPasscodeError(false);
+                  }}
+                  placeholder="Enter passcode"
+                  autoFocus
+                  autoComplete="off"
+                  className="w-full p-3 md:p-4 bg-black/30 text-white font-bold text-sm md:text-lg tracking-wider placeholder:text-white/40 focus:outline-none border-2 border-[#00f0ff]/50 focus:border-[#00f0ff] transition-colors"
+                />
+
+                <button
+                  type="submit"
+                  onMouseEnter={playHoverSound}
+                  disabled={!passcodeInput.trim()}
+                  className="bg-white hover:bg-[#00f0ff] text-black px-4 py-3 md:py-4 font-black italic tracking-widest text-sm md:text-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[5px_5px_0_rgba(0,0,0,0.5)]"
+                >
+                  UNLOCK
+                </button>
+              </form>
+
+              <AnimatePresence>
+                {passcodeError && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="text-[#ff003c] font-bold text-xs md:text-sm mt-3 text-left uppercase tracking-wide"
+                  >
+                    Incorrect passcode. The door remains sealed.
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <>
       <motion.div
         variants={itemVariants}
         className="shrink-0 mb-6 relative z-10 text-center"
@@ -403,6 +488,8 @@ export default function ChatbotSection() {
           </button>
         </form>
       </motion.div>
+        </>
+      )}
 
       {/* Custom Velvet Room Reset Modal */}
       <AnimatePresence>

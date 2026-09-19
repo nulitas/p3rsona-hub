@@ -230,15 +230,22 @@ export default function Portfolio() {
 
   // Track mute state reactively so the chill widget can react to it. The
   // System section mutes/unmutes by setting `.muted` directly on the <audio>
-  // element (not through React), so we listen for the native "volumechange"
-  // event it fires rather than relying on localStorage/props.
+  // element (not through React). "volumechange" should announce that, but
+  // it isn't reliable across all mobile browsers, so a short poll backs it
+  // up — cheap, and guarantees this self-corrects within a second either way.
   const [isMuted, setIsMuted] = useState(false);
   useEffect(() => {
     const audio = mainMenuAudioRef.current;
     if (!audio) return;
-    const handleVolumeChange = () => setIsMuted(audio.muted);
-    audio.addEventListener("volumechange", handleVolumeChange);
-    return () => audio.removeEventListener("volumechange", handleVolumeChange);
+
+    const sync = () => setIsMuted(audio.muted);
+    audio.addEventListener("volumechange", sync);
+    const interval = setInterval(sync, 500);
+
+    return () => {
+      audio.removeEventListener("volumechange", sync);
+      clearInterval(interval);
+    };
   }, []);
 
   // Escape key backs out of a subsection, same as clicking the Back button
@@ -274,7 +281,12 @@ export default function Portfolio() {
     const resetTimer = () => {
       setChillMode(false);
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
-      idleTimerRef.current = setTimeout(() => setChillMode(true), IDLE_DELAY);
+      idleTimerRef.current = setTimeout(() => {
+        // Final live check right before showing the widget, in case the
+        // polled/event-based `isMuted` state hasn't caught up yet.
+        if (mainMenuAudioRef.current?.muted) return;
+        setChillMode(true);
+      }, IDLE_DELAY);
     };
 
     resetTimer();

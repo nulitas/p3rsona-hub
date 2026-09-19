@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { playHoverSound, playClickSound } from "../../lib/sounds";
 import projects from "@/data/projects-data.json";
@@ -194,15 +194,9 @@ function FlyingBooksBackground() {
 }
 
 export default function ProjectsSection() {
-  // -1 = nothing selected yet. On desktop, hovering a row selects it (and a
-  // click on the already-selected row follows the link). On touch devices,
-  // hover never fires, so the first tap just selects/shows details and a
-  // second tap on the same row is what actually opens it.
+  // -1 = nothing selected yet. Clicking/tapping/hovering a row only ever
+  // previews it; opening the repo is a separate explicit button below.
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  // Tapping/clicking a link focuses it right before the click fires. Without
-  // this flag, that focus event would look identical to a genuine keyboard
-  // Tab-focus and pre-select the row before onClick gets to check it.
-  const pointerActivatedRef = useRef(false);
 
   if (!projects || projects.length === 0) {
     return null;
@@ -290,44 +284,14 @@ export default function ProjectsSection() {
             const [projName] = project.name.split("–");
 
             return (
-              <motion.a
+              <motion.button
                 key={index}
+                type="button"
                 variants={itemVariants}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onPointerEnter={(e) => {
-                  // Touch devices fire a synthetic pointerenter (mouse-compat)
-                  // right before click, which would make the very first tap
-                  // look "already selected". Only real mice should preview-on-hover.
-                  if (e.pointerType !== "mouse") return;
-                  setActiveIndex(index);
-                  playHoverSound();
-                }}
-                onPointerDown={() => {
-                  pointerActivatedRef.current = true;
-                }}
-                onFocus={() => {
-                  // Skip the focus-triggered preview when focus was caused by
-                  // a tap/click (see pointerActivatedRef above) — onClick
-                  // already handles selection for that case.
-                  if (pointerActivatedRef.current) {
-                    pointerActivatedRef.current = false;
-                    return;
-                  }
-                  setActiveIndex(index);
-                  playHoverSound();
-                }}
-                onClick={(e) => {
-                  if (activeIndex !== index) {
-                    e.preventDefault();
-                    setActiveIndex(index);
-                    playHoverSound();
-                  } else {
-                    playClickSound();
-                  }
-                }}
-                className={`flex items-center px-2 md:px-4 py-2 md:py-2 relative group cursor-pointer transition-all ${
+                onMouseEnter={() => { setActiveIndex(index); playHoverSound(); }}
+                onFocus={() => { setActiveIndex(index); playHoverSound(); }}
+                onClick={() => { setActiveIndex(index); playClickSound(); }}
+                className={`w-full flex items-center px-2 md:px-4 py-2 md:py-2 relative group cursor-pointer transition-all text-left ${
                   isHovered
                     ? "bg-white text-black"
                     : "bg-transparent text-[#00f0ff] hover:bg-white/10"
@@ -372,7 +336,7 @@ export default function ProjectsSection() {
                     </span>
                   </div>
                 </div>
-              </motion.a>
+              </motion.button>
             );
           })}
         </div>
@@ -392,9 +356,22 @@ export default function ProjectsSection() {
             <p className="text-sm md:text-lg font-medium tracking-wide shadow-black drop-shadow-md max-w-2xl text-white">
               {activeProjectDesc
                 ? activeProjectDesc.trim()
-                : "Select a project to preview it, then select it again to open the repo."}
+                : "Select a project below to see its details."}
             </p>
           </div>
+
+          {activeProject && (
+            <a
+              href={activeProject.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={playHoverSound}
+              onClick={playClickSound}
+              className="inline-flex items-center gap-2 mt-3 md:mt-4 bg-[#00f0ff] text-black font-black italic text-sm md:text-base px-4 py-2 -skew-x-6 shadow-[4px_4px_0_rgba(0,0,0,0.5)] hover:bg-white transition-colors"
+            >
+              <span className="skew-x-6 block">View on GitHub →</span>
+            </a>
+          )}
         </motion.div>
       </div>
     </motion.div>

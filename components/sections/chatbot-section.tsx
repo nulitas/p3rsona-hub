@@ -267,7 +267,7 @@ export default function ChatbotSection() {
 
       {/* Floating Butterflies Overlay */}
       <BlueButterflies />
-
+      {/* 
       <motion.div
         variants={itemVariants}
         className="shrink-0 mb-6 relative z-10 text-center"
@@ -275,7 +275,7 @@ export default function ChatbotSection() {
         <h1 className="text-4xl md:text-5xl font-black m-0 tracking-tighter italic uppercase text-white drop-shadow-[0_4px_10px_rgba(0,240,255,0.6)]">
           VELVET ROOM LINK
         </h1>
-      </motion.div>
+      </motion.div> */}
 
       <motion.div
         variants={itemVariants}
@@ -376,7 +376,7 @@ export default function ChatbotSection() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="What is your request?"
-            className="flex-1 p-3 md:p-5 lg:p-6 bg-[#03068e]/80 text-white font-bold text-sm md:text-lg lg:text-xl tracking-wider placeholder:text-white/40 focus:outline-none transition-all shadow-[10px_10px_0_rgba(0,0,0,0.5)] border-t-2 border-t-[#00f0ff] skew-x-[-5deg] relative z-20"
+            className="flex-1 min-w-0 p-3 md:p-5 lg:p-6 bg-[#03068e]/80 text-white font-bold text-sm md:text-lg lg:text-xl tracking-wider placeholder:text-white/40 focus:outline-none transition-all shadow-[10px_10px_0_rgba(0,0,0,0.5)] border-t-2 border-t-[#00f0ff] skew-x-[-5deg] relative z-20"
             autoComplete="off"
             disabled={isLoading}
           />
@@ -394,7 +394,10 @@ export default function ChatbotSection() {
           <button
             type="button"
             onMouseEnter={playHoverSound}
-            onClick={() => { playClickSound(); setShowResetModal(true); }}
+            onClick={() => {
+              playClickSound();
+              setShowResetModal(true);
+            }}
             disabled={isLoading}
             className="bg-[#021bc9] hover:bg-[#ff003c] text-white px-3 md:px-6 py-3 md:py-5 lg:py-6 font-black tracking-widest cursor-pointer transition-all skew-x-[-5deg] shadow-[5px_5px_0_rgba(0,0,0,0.5)] z-20 shrink-0 border border-white/20"
             title="Reset Chat"
@@ -431,14 +434,20 @@ export default function ChatbotSection() {
               <div className="flex gap-4 justify-end font-black italic tracking-widest text-lg">
                 <button
                   onMouseEnter={playHoverSound}
-                  onClick={() => { playClickSound(); setShowResetModal(false); }}
+                  onClick={() => {
+                    playClickSound();
+                    setShowResetModal(false);
+                  }}
                   className="px-6 py-3 border-2 border-[#00f0ff] text-[#00f0ff] hover:bg-[#00f0ff] hover:text-black transition-colors"
                 >
                   CANCEL
                 </button>
                 <button
                   onMouseEnter={playHoverSound}
-                  onClick={() => { playClickSound(); clearChat(); }}
+                  onClick={() => {
+                    playClickSound();
+                    clearChat();
+                  }}
                   className="px-6 py-3 bg-red-600 border-2 border-red-600 text-white hover:bg-white hover:text-red-600 hover:border-white transition-colors"
                 >
                   SEVER

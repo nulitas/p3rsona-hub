@@ -1,37 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playHoverSound, playClickSound } from "../../lib/sounds";
 import experienceData from "@/data/experience-data.json";
+import projectsData from "@/data/projects-data.json";
+
+const featuredProjects = projectsData.slice(0, 3);
 
 const workItems = [
   "Full-stack web apps with Next.js, React & TypeScript",
   "AI-driven interfaces and high-performance UX",
   "Backend systems with Node.js, Laravel & Python",
-  "Video-game inspired interaction design",
 ];
 
 export default function ProfileSection() {
-  const [loginTime, setLoginTime] = useState("");
   const [showExperience, setShowExperience] = useState(false);
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const d = String(now.getDate()).padStart(2, "0");
-      const m = String(now.getMonth() + 1).padStart(2, "0");
-      const y = now.getFullYear();
-      const time = `${String(now.getHours()).padStart(2, "0")}:${String(
-        now.getMinutes(),
-      ).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-      setLoginTime(`${y}/${m}/${d} ${time}`);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Dynamically calculate years of experience
   const yearsExperience = (() => {
@@ -84,12 +68,12 @@ export default function ProfileSection() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="flex h-full w-full relative z-10 p-4 md:p-8 lg:p-10 font-sans overflow-hidden"
+      className="flex h-full w-full  relative z-10 p-4 md:p-8 lg:p-10 font-sans overflow-hidden"
     >
       {/* Main Dossier Card */}
       <motion.div
         variants={itemVariants}
-        className="flex-1 min-h-0 relative z-10 shadow-[0_10px_40px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col transition-colors duration-500"
+        className="w-full max-h-full min-h-0 relative z-10 shadow-[0_10px_40px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col transition-colors duration-500"
         style={{ backgroundColor: showExperience ? "#020b06" : "white" }}
       >
         {/* Faint decorative portrait bleeding into the card's empty space */}
@@ -97,7 +81,7 @@ export default function ProfileSection() {
           src="/avatar.png"
           alt=""
           aria-hidden="true"
-          className="hidden md:block absolute right-0 top-0 h-full w-auto object-contain object-top opacity-[0.08] grayscale pointer-events-none select-none z-0"
+          className="hidden md:block absolute right-0 top-0 h-full w-auto object-contain object-top opacity-25 pointer-events-none select-none z-0"
         />
 
         <AnimatePresence mode="wait">
@@ -132,9 +116,8 @@ export default function ProfileSection() {
                     <span className="opacity-60">· {yearsExperience}+ yrs</span>
                   </p>
                   <p className="text-sm md:text-base opacity-70 mt-2 max-w-lg leading-relaxed">
-                    I architect robust systems using Next.js and weave
-                    interactive, video-game philosophies into my UI/UX
-                    engineering.
+                    I'm the one who writes code that looks flawless in Chrome,
+                    chaotic in Safari, and doesn't load in Internet Explorer.
                   </p>
                 </div>
               </div>
@@ -156,6 +139,40 @@ export default function ProfileSection() {
                       <span>{item}</span>
                     </li>
                   ))}
+                </ul>
+              </div>
+
+              {/* Featured Projects */}
+              <div className="mb-6 md:mb-8 max-w-xl">
+                <h3 className="font-black uppercase tracking-widest text-sm md:text-base mb-3 border-b-2 border-black/10 pb-2">
+                  Featured Projects
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {featuredProjects.map((project) => {
+                    const [projName] = project.name.split("–");
+                    return (
+                      <li key={project.name}>
+                        <a
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onMouseEnter={playHoverSound}
+                          onClick={playClickSound}
+                          className="group flex items-center gap-2 text-sm md:text-base"
+                        >
+                          <span className="text-[#00b8d4] font-black shrink-0">
+                            ▸
+                          </span>
+                          <span className="group-hover:underline">
+                            {projName.trim()}
+                          </span>
+                          <span className="text-[10px] md:text-xs font-black uppercase tracking-wide bg-[#00e5ff] text-black px-2 py-0.5 shrink-0">
+                            {project.status ? "Done" : "Dev"}
+                          </span>
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
@@ -243,17 +260,6 @@ export default function ProfileSection() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
-
-      {/* Footer Clock */}
-      <motion.div
-        variants={itemVariants}
-        className="fixed md:absolute bottom-4 right-4 md:bottom-8 md:right-8 text-white font-bold italic text-sm md:text-xl tracking-widest drop-shadow-[2px_2px_0_rgba(0,0,0,0.8)] z-40 pointer-events-none"
-      >
-        <span className="opacity-70 mr-4">CLOCK_SYNC</span>
-        <span className="font-mono text-2xl bg-[#050505] px-3 py-1 -skew-x-15 inline-block shadow-[3px_3px_0_#00e5ff] border border-white/20">
-          <span className="skew-x-15 block">{loginTime || "LOADING..."}</span>
-        </span>
       </motion.div>
     </motion.div>
   );

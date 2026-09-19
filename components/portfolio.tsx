@@ -513,18 +513,20 @@ export default function Portfolio() {
               initial={{ x: -200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="absolute opacity-20 -left-[30%] md:-left-[0%] md:opacity-90 lg:left-[12%] top-[2%] md:top-[-30%] w-[140vw] md:w-[70vw] lg:w-[45vw] h-[100%] md:h-[120%] z-20 flex items-start justify-start pointer-events-none"
+              className="absolute opacity-20 left-[-30%] top-[-6%] w-[140vw] h-full md:portrait:opacity-90 md:portrait:left-[-10%] md:portrait:top-[-6%] md:portrait:w-[90vw] md:portrait:h-[110%] md:landscape:opacity-90 md:landscape:left-[0%] md:landscape:top-[-16%] md:landscape:w-auto md:landscape:h-[95%] lg:landscape:left-[12%] z-20 flex items-start justify-start pointer-events-none"
             >
-              {/* 
-                We use an animated GIF with a transparent background. 
+              {/*
+                We use an animated GIF with a transparent background.
                 We apply CSS filters to tint the image perfectly into a P3 Reload cyan/blue style.
-                Framer motion adds a slow 'floating in water' breathing effect to the entire GIF. 
+                Framer motion adds a slow 'floating in water' breathing effect to the entire GIF.
+                Landscape breakpoints size the image off container HEIGHT (not width) so it doesn't
+                balloon and swallow the nav text on short-but-wide viewports (e.g. Nest Hub Max).
               */}
 
               <motion.img
                 src="/avatar.png"
                 alt="Protagonist"
-                className="w-full h-auto object-contain rotate-180 -scale-x-100"
+                className="w-full h-auto object-contain rotate-180 -scale-x-100 md:landscape:w-auto md:landscape:h-full"
                 style={{
                   filter:
                     "sepia(1) hue-rotate(180deg) saturate(400%) brightness(1.2) contrast(1.1) drop-shadow(10px -10px 30px rgba(0,240,255,0.6))",

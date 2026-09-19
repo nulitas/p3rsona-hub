@@ -710,7 +710,7 @@ export default function Portfolio() {
             initial="hidden"
             animate="enter"
             exit="exit"
-            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] backdrop-blur-2xl flex flex-col items-center justify-center p-2 md:p-10 pb-2 md:pb-4 overflow-hidden"
+            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] flex flex-col items-center justify-center p-2 md:p-10 pb-2 md:pb-4 overflow-hidden"
           >
             {/* Sub-section Back Button */}
             <button
@@ -744,7 +744,7 @@ export default function Portfolio() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.1 } }}
-            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] backdrop-blur-2xl flex flex-col items-center justify-center p-2 md:p-10 pb-2 md:pb-4 overflow-hidden"
+            className="absolute inset-0 w-full h-full z-40 bg-[#121ebb] flex flex-col items-center justify-center p-2 md:p-10 pb-2 md:pb-4 overflow-hidden"
           >
             {/* Sub-section Back Button */}
             <button

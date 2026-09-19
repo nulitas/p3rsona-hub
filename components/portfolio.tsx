@@ -141,6 +141,11 @@ export default function Portfolio() {
   const mainMenuAudioRef = useRef<HTMLAudioElement>(null);
   const velvetAudioRef = useRef<HTMLAudioElement>(null);
 
+  // "Now Playing" chill widget: surfaces after idling on the main menu
+  const [chillMode, setChillMode] = useState(false);
+  const [trackProgress, setTrackProgress] = useState({ current: 0, duration: 0 });
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Splash Screen Timer
   useEffect(() => {
     const timer = setTimeout(() => setShowSplash(false), 3500);
@@ -294,6 +299,79 @@ export default function Portfolio() {
       window.removeEventListener("dblclick", handleDoubleClick);
     };
   }, [activeSection]);
+
+  // Escape key backs out of a subsection, same as clicking the Back button
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (activeSection === "none" || doorState !== "idle") return;
+      playClickSound();
+      handleSectionChange("none");
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [activeSection, doorState]);
+
+  // Idle detection: surface the "Now Playing" chill widget after standing
+  // still on the main menu for a few seconds; any input dismisses it.
+  useEffect(() => {
+    const onMainMenu =
+      activeSection === "none" && !showSplash && doorState === "idle";
+
+    if (!onMainMenu) {
+      setChillMode(false);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      return;
+    }
+
+    const IDLE_DELAY = 3000;
+    const resetTimer = () => {
+      setChillMode(false);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = setTimeout(() => setChillMode(true), IDLE_DELAY);
+    };
+
+    resetTimer();
+    const events: (keyof WindowEventMap)[] = [
+      "mousemove",
+      "keydown",
+      "click",
+      "touchstart",
+      "wheel",
+    ];
+    events.forEach((ev) => window.addEventListener(ev, resetTimer));
+
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, resetTimer));
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    };
+  }, [activeSection, showSplash, doorState]);
+
+  // Track main menu theme playback position for the chill widget's progress bar
+  useEffect(() => {
+    const audio = mainMenuAudioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setTrackProgress({
+        current: audio.currentTime,
+        duration: audio.duration || 0,
+      });
+    };
+
+    audio.addEventListener("timeupdate", updateProgress);
+    return () => audio.removeEventListener("timeupdate", updateProgress);
+  }, []);
+
+  const formatTrackTime = (seconds: number) => {
+    if (!isFinite(seconds) || seconds < 0) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
   const handleSectionChange = (section: Section) => {
     if (section === "chatbot" && activeSection !== "chatbot") {
@@ -541,9 +619,86 @@ export default function Portfolio() {
             </motion.div>
 
             {/* Centered Tilted Menu */}
-            <div className="absolute inset-0 flex items-center mb-10 justify-center pl-[5%] md:pl-[10%] lg:pl-0 z-30">
-              <Navigation onSectionChange={handleSectionChange} />
-            </div>
+            <AnimatePresence>
+              {!chillMode && (
+                <motion.div
+                  key="nav-menu"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.35 }}
+                  className="absolute inset-0 flex items-center mb-10 justify-center pl-[5%] md:pl-[10%] lg:pl-0 z-30"
+                >
+                  <Navigation onSectionChange={handleSectionChange} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+
+            {/* "Now Playing" chill widget: centered, behind the avatar, no card chrome */}
+            <AnimatePresence>
+              {chillMode && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="absolute inset-0 z-15 flex items-end justify-center pb-16 md:items-center md:justify-center md:pb-0 pointer-events-none"
+                >
+                  <div className="flex flex-col items-center gap-4 md:gap-6 w-[90vw] max-w-xl px-4">
+                    {/* Visualizer bars */}
+                    <div className="flex items-end justify-center gap-1 md:gap-1.5 h-16 md:h-28 w-full">
+                      {Array.from({ length: 20 }).map((_, i) => (
+                        <motion.span
+                          key={i}
+                          className="w-1.5 md:w-2.5 rounded-full bg-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.8)]"
+                          animate={{
+                            height: [
+                              `${15 + ((i * 37) % 30)}%`,
+                              `${40 + ((i * 53) % 60)}%`,
+                              `${20 + ((i * 29) % 40)}%`,
+                              `${50 + ((i * 61) % 50)}%`,
+                              `${15 + ((i * 37) % 30)}%`,
+                            ],
+                          }}
+                          transition={{
+                            duration: 1.2 + (i % 5) * 0.2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: i * 0.05,
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Title */}
+                    <div className="text-white font-black italic text-3xl md:text-5xl tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] text-center">
+                      Color Your Night
+                    </div>
+
+                    {/* Progress */}
+                    <div className="w-full">
+                      <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#00f0ff] shadow-[0_0_8px_#00f0ff]"
+                          style={{
+                            width: `${
+                              trackProgress.duration > 0
+                                ? (trackProgress.current / trackProgress.duration) * 100
+                                : 0
+                            }%`,
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-between mt-1.5 text-white/70 text-xs md:text-sm font-mono drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                        <span>{formatTrackTime(trackProgress.current)}</span>
+                        <span>{formatTrackTime(trackProgress.duration)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
 

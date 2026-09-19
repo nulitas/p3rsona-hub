@@ -21,7 +21,7 @@ export default function Navigation({ onSectionChange }: NavigationProps) {
   }[] = [
     {
       key: "profile",
-      label: "STATS",
+      label: "PROFILE",
       layoutClass: "-rotate-12 translate-x-4 md:translate-x-12",
       zIndex: "z-[40]",
     },

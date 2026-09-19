@@ -4,8 +4,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.25 0.08 245); 
-  --foreground: oklch(1 0 0); 
+  --background: oklch(0.25 0.08 245);
+  --foreground: oklch(1 0 0);
   --font-outfit: "Outfit", sans-serif;
 }
 
@@ -19,7 +19,7 @@
 @layer base {
   body {
     @apply bg-background text-foreground font-sans;
-    overflow: hidden; 
+    overflow: hidden;
     background-color: #0a52f4; /* Lighter pure P3R blue */
   }
 }
@@ -41,7 +41,13 @@
 }
 
 .clip-corner {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 30px),
+    calc(100% - 30px) 100%,
+    0 100%
+  );
 }
 
 .clip-corner-reverse {
@@ -60,7 +66,7 @@
   width: 6px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #00f0ff;

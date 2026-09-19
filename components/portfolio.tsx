@@ -328,16 +328,16 @@ export default function Portfolio() {
       scale: 1,
       filter: "blur(0px)",
       transition: {
-        duration: 0.6,
+        duration: 0.35,
         ease: "easeOut" as const,
-        staggerChildren: 0.1,
+        staggerChildren: 0.05,
       },
     },
     exit: {
       opacity: 0,
-      scale: 0.9,
-      filter: "blur(10px)",
-      transition: { duration: 0.4, ease: "easeIn" as const },
+      scale: 0.95,
+      filter: "blur(4px)",
+      transition: { duration: 0.2, ease: "easeIn" as const },
     },
   };
 
@@ -347,12 +347,12 @@ export default function Portfolio() {
     enter: {
       opacity: 1,
       clipPath: "circle(150% at 50% 50%)",
-      transition: { duration: 0.8, ease: "easeOut" as const },
+      transition: { duration: 0.4, ease: "easeOut" as const },
     },
     exit: {
       opacity: 0,
       clipPath: "circle(0% at 50% 50%)",
-      transition: { duration: 0.5, ease: "easeIn" as const },
+      transition: { duration: 0.25, ease: "easeIn" as const },
     },
   };
 
@@ -492,7 +492,7 @@ export default function Portfolio() {
       {/* Base background while splash is active to transition smoothly without white flash */}
       <div className="absolute inset-0 z-[-1] bg-[#000000] pointer-events-none" />
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {/* State A: Main Menu */}
         {activeSection === "none" && !showSplash && (
           <motion.div

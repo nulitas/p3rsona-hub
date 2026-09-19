@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { playHoverSound, playClickSound } from "../../lib/sounds";
 
@@ -21,6 +21,33 @@ const skillDatabase = [
 
 export default function PersonaSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number>(2);
+  const listRef = useRef<HTMLDivElement>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+
+  const updateScrollState = () => {
+    const el = listRef.current;
+    if (!el) return;
+    setCanScrollUp(el.scrollTop > 4);
+    setCanScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight - 4);
+  };
+
+  useEffect(() => {
+    updateScrollState();
+    const el = listRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollList = (direction: "up" | "down") => {
+    playClickSound();
+    listRef.current?.scrollBy({
+      top: direction === "up" ? -160 : 160,
+      behavior: "smooth",
+    });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -60,10 +87,43 @@ export default function PersonaSection() {
       </div>
 
       {/* Left Column: Menu Items */}
-      <div className="w-full md:w-[45%] flex flex-col relative z-20 h-auto md:h-[70vh] pl-2 md:pl-10 mt-4 md:mt-10">
-        <div className="flex flex-col gap-1 w-full max-w-full md:max-w-125 overflow-y-auto custom-scrollbar pr-2 md:pr-4 max-h-[45vh] md:max-h-none">
+      <div className="w-full md:w-[45%] flex flex-col relative z-20 h-auto md:h-[calc(100%-2.5rem)] pl-2 md:pl-10 mt-4 md:mt-10">
+        <div className="relative md:flex md:flex-col md:flex-1 md:min-h-0">
+          {/* Top fade + Scroll Up Button */}
+          <AnimatePresence>
+            {canScrollUp && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute top-0 inset-x-0 h-12 z-20 pointer-events-none bg-linear-to-b from-[#121ebb] to-transparent"
+              />
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {canScrollUp && (
+              <motion.button
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                onMouseEnter={playHoverSound}
+                onClick={() => scrollList("up")}
+                className="absolute -top-3 left-1/2 -translate-x-1/2 z-30 w-9 h-9 flex items-center justify-center bg-[#00f0ff] text-black border-2 border-black shadow-[3px_3px_0_rgba(0,0,0,0.6)] hover:bg-white transition-colors cursor-pointer"
+                aria-label="Scroll up"
+              >
+                <span className="text-lg font-black leading-none -mt-0.5">▲</span>
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          <div
+            ref={listRef}
+            onScroll={updateScrollState}
+            className="flex flex-col gap-1 w-full max-w-full md:max-w-125 overflow-y-auto custom-scrollbar pr-2 md:pr-4 max-h-[45vh] md:max-h-none md:flex-1 md:min-h-0"
+          >
           {skillDatabase.map((item, index) => {
             const isSelected = hoveredIndex === index;
+            const rank = String(index + 1).padStart(2, "0");
 
             return (
               <motion.div
@@ -98,12 +158,12 @@ export default function PersonaSection() {
                   <span
                     className={`${isSelected ? "text-xl font-sans font-bold italic pr-1" : ""}`}
                   >
-                    {isSelected ? "Lv " : ""}
+                    {isSelected ? "No. " : "#"}
                   </span>
                   <span
                     className={`${isSelected ? "text-3xl font-black italic font-sans" : "text-2xl font-bold"}`}
                   >
-                    {item.level}
+                    {rank}
                   </span>
                   <span className="mx-2 opacity-50 text-sm">•</span>
                   <span
@@ -115,21 +175,49 @@ export default function PersonaSection() {
               </motion.div>
             );
           })}
+          </div>
+
+          {/* Bottom fade + Scroll Down Button */}
+          <AnimatePresence>
+            {canScrollDown && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute bottom-0 inset-x-0 h-12 z-20 pointer-events-none bg-linear-to-t from-[#121ebb] to-transparent"
+              />
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {canScrollDown && (
+              <motion.button
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                onMouseEnter={playHoverSound}
+                onClick={() => scrollList("down")}
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-30 w-9 h-9 flex items-center justify-center bg-[#00f0ff] text-black border-2 border-black shadow-[3px_3px_0_rgba(0,0,0,0.6)] hover:bg-white transition-colors cursor-pointer"
+                aria-label="Scroll down"
+              >
+                <span className="text-lg font-black leading-none mt-0.5">▼</span>
+              </motion.button>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
       {/* Right Column: Dynamic Persona Image/Icon */}
       <div className="absolute right-[-10vw] md:right-[5vw] top-0 bottom-0 w-[120vw] md:w-[50%] pointer-events-none z-10 flex items-center justify-center overflow-hidden">
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {skillDatabase[hoveredIndex] && (
             <motion.div
               key={hoveredIndex}
               initial={{
                 opacity: 0,
-                scale: 0.9,
-                x: 50,
-                filter: "blur(10px)",
-                rotate: 5,
+                scale: 0.92,
+                x: 20,
+                filter: "blur(4px)",
+                rotate: 3,
               }}
               animate={{
                 opacity: 1,
@@ -140,12 +228,12 @@ export default function PersonaSection() {
               }}
               exit={{
                 opacity: 0,
-                scale: 1.1,
-                x: -50,
-                filter: "blur(10px)",
-                rotate: -5,
+                scale: 1.05,
+                x: -20,
+                filter: "blur(4px)",
+                rotate: -3,
               }}
-              transition={{ type: "spring", stiffness: 150, damping: 20 }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
               className="flex flex-col items-center justify-center relative w-full h-full"
             >
               {/* Background Colored Aura */}

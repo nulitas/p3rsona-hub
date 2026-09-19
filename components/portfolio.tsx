@@ -18,6 +18,119 @@ export type Section =
   | "chatbot"
   | "none";
 
+// Decorative "underwater" backdrop for the main menu: a bright waterline,
+// sunbeam shafts, drifting caustics and rising bubbles to sell the P3-style
+// water splash look behind the nav.
+const WaterSplashBackground = () => {
+  const bubbles = Array.from({ length: 22 }).map((_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    size: 5 + Math.random() * 16,
+    duration: 5 + Math.random() * 9,
+    delay: Math.random() * 8,
+    drift: Math.random() * 30 - 15,
+  }));
+
+  const caustics = [
+    { top: "-15%", left: "-10%", size: "65vw", color: "#ffffff", duration: 13 },
+    { top: "10%", left: "55%", size: "55vw", color: "#00f0ff", duration: 17 },
+    { top: "50%", left: "0%", size: "50vw", color: "#4deeea", duration: 21 },
+    { top: "60%", left: "50%", size: "60vw", color: "#0a52f4", duration: 15 },
+  ];
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Sunbeam shafts streaming down from the surface */}
+      <div
+        className="absolute inset-x-0 top-0 h-[45%] opacity-25 mix-blend-screen"
+        style={{
+          background:
+            "repeating-linear-gradient(100deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 30px, transparent 30px, transparent 120px)",
+          maskImage: "linear-gradient(to bottom, black, transparent)",
+          WebkitMaskImage: "linear-gradient(to bottom, black, transparent)",
+        }}
+      />
+
+      {/* Drifting caustic light blobs */}
+      {caustics.map((c, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full mix-blend-screen opacity-40"
+          style={{
+            top: c.top,
+            left: c.left,
+            width: c.size,
+            height: c.size,
+            background: `radial-gradient(circle at center, ${c.color} 0%, transparent 70%)`,
+            filter: "blur(35px)",
+          }}
+          animate={{
+            x: ["0%", "8%", "-6%", "0%"],
+            y: ["0%", "-6%", "5%", "0%"],
+            scale: [1, 1.15, 0.95, 1],
+          }}
+          transition={{
+            duration: c.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* Animated wavy waterline separating a brighter "surface" band from the deep */}
+      <div className="absolute left-0 right-0 top-[30%] h-20 md:h-28 overflow-hidden opacity-70">
+        <motion.svg
+          viewBox="0 0 200 40"
+          preserveAspectRatio="none"
+          className="w-[200%] h-full"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 11, repeat: Infinity, ease: "linear" }}
+        >
+          <defs>
+            <linearGradient id="waterlineGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
+              <stop offset="40%" stopColor="#4deeea" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#4deeea" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M0 20 Q 12.5 6 25 20 T 50 20 T 75 20 T 100 20 T 125 20 T 150 20 T 175 20 T 200 20 V40 H0 Z"
+            fill="url(#waterlineGrad)"
+          />
+        </motion.svg>
+      </div>
+
+      {/* Diagonal light shimmer sweep */}
+      <motion.div
+        className="absolute -inset-y-1/2 w-1/3 -skew-x-12 bg-linear-to-r from-transparent via-white/20 to-transparent mix-blend-screen"
+        animate={{ x: ["-40vw", "140vw"] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Rising bubbles */}
+      {bubbles.map((b) => (
+        <motion.div
+          key={b.id}
+          initial={{ x: `${b.x}vw`, y: "110%", opacity: 0 }}
+          animate={{
+            x: [`${b.x}vw`, `${b.x + b.drift}vw`],
+            y: ["110%", "-10%"],
+            opacity: [0, 0.8, 0.8, 0],
+          }}
+          transition={{
+            duration: b.duration,
+            delay: b.delay,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute rounded-full bg-white/50 border border-white/60 shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+          style={{ width: b.size, height: b.size }}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState<Section>("none");
   const [showSplash, setShowSplash] = useState(true);
@@ -390,6 +503,11 @@ export default function Portfolio() {
             exit="exit"
             className="absolute inset-0 w-full h-full flex z-10"
           >
+            {/* Water Splash Backdrop */}
+            <div className="absolute inset-0 z-0">
+              <WaterSplashBackground />
+            </div>
+
             {/* Protagonist Avatar - Upside Down, Animated GIF */}
             <motion.div
               initial={{ x: -200, opacity: 0 }}
@@ -406,7 +524,7 @@ export default function Portfolio() {
               <motion.img
                 src="/avatar.png"
                 alt="Protagonist"
-                className="w-full h-auto object-contain rotate-180"
+                className="w-full h-auto object-contain rotate-180 -scale-x-100"
                 style={{
                   filter:
                     "sepia(1) hue-rotate(180deg) saturate(400%) brightness(1.2) contrast(1.1) drop-shadow(10px -10px 30px rgba(0,240,255,0.6))",

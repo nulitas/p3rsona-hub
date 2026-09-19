@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navigation from "./navigation";
@@ -17,6 +18,9 @@ export type Section =
   | "persona"
   | "chatbot"
   | "none";
+
+// Set NEXT_PUBLIC_VELVET_PASSCODE in .env; leave it empty/unset to disable the gate entirely.
+const VELVET_PASSCODE = process.env.NEXT_PUBLIC_VELVET_PASSCODE ?? "";
 
 // Decorative "underwater" backdrop for the main menu: a bright waterline,
 // sunbeam shafts, drifting caustics and rising bubbles to sell the P3-style
@@ -135,8 +139,13 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState<Section>("none");
   const [showSplash, setShowSplash] = useState(true);
   const [doorState, setDoorState] = useState<
-    "idle" | "enter1" | "enter2" | "leave1" | "leave2"
+    "idle" | "enter1" | "awaiting-passcode" | "enter2" | "leave1" | "leave2"
   >("idle");
+  const [velvetPasscodeInput, setVelvetPasscodeInput] = useState("");
+  const [velvetPasscodeError, setVelvetPasscodeError] = useState(false);
+  // Muted while the passcode gate is up; only allowed to play once the
+  // correct code is entered (or immediately if no passcode is configured).
+  const [velvetAudioAllowed, setVelvetAudioAllowed] = useState(true);
 
   const mainMenuAudioRef = useRef<HTMLAudioElement>(null);
   const velvetAudioRef = useRef<HTMLAudioElement>(null);
@@ -146,7 +155,10 @@ export default function Portfolio() {
   // been selected at least once this load) — otherwise it'd show a widget
   // for a track that was never actually playing.
   const [chillMode, setChillMode] = useState(false);
-  const [trackProgress, setTrackProgress] = useState({ current: 0, duration: 0 });
+  const [trackProgress, setTrackProgress] = useState({
+    current: 0,
+    duration: 0,
+  });
   const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const audioUnlockedRef = useRef(false);
 
@@ -195,10 +207,14 @@ export default function Portfolio() {
       return;
     }
 
-    const isVelvet =
+    const inVelvetContext =
       activeSection === "chatbot" ||
       doorState === "enter1" ||
       doorState === "enter2";
+    const isVelvet = velvetAudioAllowed && inVelvetContext;
+    // Held silent while the door is swinging shut or the passcode gate is up
+    // and not yet solved — neither theme should play until it resolves.
+    const isSilent = inVelvetContext && !velvetAudioAllowed;
 
     // Read user's explicit volume preference
     let masterVolume = 1;
@@ -211,12 +227,15 @@ export default function Portfolio() {
       if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, 0);
       if (velvetAudioRef.current)
         fadeAudio(velvetAudioRef.current, masterVolume);
+    } else if (isSilent) {
+      if (mainMenuAudioRef.current) fadeAudio(mainMenuAudioRef.current, 0);
+      if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, 0);
     } else {
       if (mainMenuAudioRef.current)
         fadeAudio(mainMenuAudioRef.current, masterVolume);
       if (velvetAudioRef.current) fadeAudio(velvetAudioRef.current, 0);
     }
-  }, [activeSection, showSplash, doorState]);
+  }, [activeSection, showSplash, doorState, velvetAudioAllowed]);
 
   // Sync muted state on mount
   useEffect(() => {
@@ -346,18 +365,31 @@ export default function Portfolio() {
     if (audioMain?.paused && section !== "chatbot") {
       audioMain.play().catch(() => {});
     }
-    if (audioVelvet?.paused && section === "chatbot") {
+    // Don't eagerly unlock the velvet theme here when a passcode gate is
+    // waiting to be solved — it should stay silent until it's entered correctly.
+    if (audioVelvet?.paused && section === "chatbot" && !VELVET_PASSCODE) {
       audioVelvet.play().catch(() => {});
     }
 
     if (section === "chatbot" && activeSection !== "chatbot") {
       // ENTERING VELVET ROOM
       if (velvetAudioRef.current) velvetAudioRef.current.currentTime = 0;
+      setVelvetPasscodeInput("");
+      setVelvetPasscodeError(false);
+      setVelvetAudioAllowed(!VELVET_PASSCODE);
       setDoorState("enter1");
+      // Swap content immediately while the overlay is still solid black, so the
+      // Velvet Room has the full door-swing to mount/load before the white flash reveals it.
+      setActiveSection(section);
       setTimeout(() => {
-        setActiveSection(section);
-        setDoorState("enter2");
-        setTimeout(() => setDoorState("idle"), 1000);
+        if (VELVET_PASSCODE) {
+          // Hold on the white flash and ask for the passcode there; the fade-out
+          // into the (already unlocked) room only resumes once it's entered correctly.
+          setDoorState("awaiting-passcode");
+        } else {
+          setDoorState("enter2");
+          setTimeout(() => setDoorState("idle"), 1000);
+        }
       }, 1500);
     } else if (activeSection === "chatbot" && section !== "chatbot") {
       // LEAVING VELVET ROOM
@@ -371,6 +403,30 @@ export default function Portfolio() {
       }, 1000); // Give the door 1 full second to swing shut before flashing
     } else {
       setActiveSection(section);
+    }
+  };
+
+  const handleVelvetPasscodeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (
+      velvetPasscodeInput.trim().toUpperCase() === VELVET_PASSCODE.toUpperCase()
+    ) {
+      playClickSound();
+      // Unlock the velvet theme's playback right on this gesture, same as the
+      // nav click does for the unlocked case, so autoplay isn't blocked later.
+      const audioVelvet = document.getElementById(
+        "velvet-room-bgm",
+      ) as HTMLAudioElement | null;
+      if (audioVelvet?.paused) audioVelvet.play().catch(() => {});
+      setVelvetPasscodeInput("");
+      setVelvetPasscodeError(false);
+      setVelvetAudioAllowed(true);
+      setDoorState("enter2");
+      setTimeout(() => setDoorState("idle"), 1000);
+    } else {
+      playClickSound();
+      setVelvetPasscodeError(true);
+      setVelvetPasscodeInput("");
     }
   };
 
@@ -610,7 +666,6 @@ export default function Portfolio() {
               )}
             </AnimatePresence>
 
-
             {/* "Now Playing" chill widget: centered, behind the avatar, no card chrome */}
             <AnimatePresence>
               {chillMode && (
@@ -660,7 +715,9 @@ export default function Portfolio() {
                           style={{
                             width: `${
                               trackProgress.duration > 0
-                                ? (trackProgress.current / trackProgress.duration) * 100
+                                ? (trackProgress.current /
+                                    trackProgress.duration) *
+                                  100
                                 : 0
                             }%`,
                           }}
@@ -835,25 +892,29 @@ export default function Portfolio() {
                 opacity:
                   doorState === "enter1"
                     ? [0, 0, 1]
-                    : doorState === "enter2"
-                      ? [1, 1, 0]
-                      : doorState === "leave1"
-                        ? 0
-                        : doorState === "leave2"
-                          ? [1, 1, 0]
-                          : 0,
+                    : doorState === "awaiting-passcode"
+                      ? 1
+                      : doorState === "enter2"
+                        ? [1, 1, 0]
+                        : doorState === "leave1"
+                          ? 0
+                          : doorState === "leave2"
+                            ? [1, 1, 0]
+                            : 0,
               }}
               transition={{
                 duration:
                   doorState === "enter1"
                     ? 1.5
-                    : doorState === "enter2"
-                      ? 1.2
-                      : doorState === "leave1"
-                        ? 0
-                        : doorState === "leave2"
-                          ? 1.2
-                          : 0,
+                    : doorState === "awaiting-passcode"
+                      ? 0
+                      : doorState === "enter2"
+                        ? 1.2
+                        : doorState === "leave1"
+                          ? 0
+                          : doorState === "leave2"
+                            ? 1.2
+                            : 0,
                 times:
                   doorState === "enter1"
                     ? [0, 0.73, 1]
@@ -866,6 +927,75 @@ export default function Portfolio() {
               }}
               style={{ zIndex: 50 }}
             />
+
+            {/* Passcode Gate: held on the white flash until the correct code is entered */}
+            <AnimatePresence>
+              {doorState === "awaiting-passcode" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.4, delay: 0.15 },
+                  }}
+                  exit={{ opacity: 0, transition: { duration: 0 } }}
+                  className="absolute inset-0 flex flex-col items-center justify-center px-4 pointer-events-auto"
+                  style={{ zIndex: 60 }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playClickSound();
+                      handleSectionChange("none");
+                    }}
+                    onMouseEnter={playHoverSound}
+                    className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center z-10 px-4 md:px-6 py-2 md:py-3 bg-white text-black font-black text-sm md:text-xl italic -skew-x-15 hover:bg-[#ff003c] hover:text-white hover:scale-105 transition-all shadow-[6px_6px_0_rgba(0,0,0,1)] hover:shadow-[-6px_6px_0_#00f0ff] duration-300 cursor-pointer"
+                  >
+                    <div className="skew-x-15 uppercase tracking-wider">
+                      &lt; BACK
+                    </div>
+                  </button>
+
+                  <form
+                    onSubmit={handleVelvetPasscodeSubmit}
+                    className="flex flex-col items-center gap-6 w-full max-w-xs"
+                  >
+                    <input
+                      type="password"
+                      value={velvetPasscodeInput}
+                      onChange={(e) => {
+                        setVelvetPasscodeInput(e.target.value);
+                        if (velvetPasscodeError) setVelvetPasscodeError(false);
+                      }}
+                      placeholder=""
+                      autoFocus
+                      autoComplete="off"
+                      className="w-full bg-transparent text-center text-[#0a52f4] font-light text-sm tracking-[0.3em] placeholder:text-[#0a52f4]/30 placeholder:tracking-normal py-2 border-b border-[#0a52f4]/25 focus:border-[#0a52f4] focus:outline-none transition-colors"
+                    />
+
+                    <button
+                      type="submit"
+                      onMouseEnter={playHoverSound}
+                      disabled={!velvetPasscodeInput.trim()}
+                      className="text-xs tracking-[0.3em] uppercase text-[#0a52f4]/60 hover:text-[#0d1a3d] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
+                    ></button>
+                  </form>
+
+                  <AnimatePresence>
+                    {velvetPasscodeError && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="text-[#ff003c]/80 font-light text-xs mt-6 text-center uppercase tracking-[0.15em]"
+                      >
+                        Incorrect passcode
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>

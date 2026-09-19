@@ -224,7 +224,21 @@ export default function Portfolio() {
       const isMuted = localStorage.getItem("bgm_muted") === "true";
       if (mainMenuAudioRef.current) mainMenuAudioRef.current.muted = isMuted;
       if (velvetAudioRef.current) velvetAudioRef.current.muted = isMuted;
+      setIsMuted(isMuted);
     }
+  }, []);
+
+  // Track mute state reactively so the chill widget can react to it. The
+  // System section mutes/unmutes by setting `.muted` directly on the <audio>
+  // element (not through React), so we listen for the native "volumechange"
+  // event it fires rather than relying on localStorage/props.
+  const [isMuted, setIsMuted] = useState(false);
+  useEffect(() => {
+    const audio = mainMenuAudioRef.current;
+    if (!audio) return;
+    const handleVolumeChange = () => setIsMuted(audio.muted);
+    audio.addEventListener("volumechange", handleVolumeChange);
+    return () => audio.removeEventListener("volumechange", handleVolumeChange);
   }, []);
 
   // Escape key backs out of a subsection, same as clicking the Back button
@@ -247,7 +261,8 @@ export default function Portfolio() {
       activeSection === "none" &&
       !showSplash &&
       doorState === "idle" &&
-      audioUnlockedRef.current;
+      audioUnlockedRef.current &&
+      !isMuted;
 
     if (!onMainMenu) {
       setChillMode(false);
@@ -276,7 +291,7 @@ export default function Portfolio() {
       events.forEach((ev) => window.removeEventListener(ev, resetTimer));
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
-  }, [activeSection, showSplash, doorState]);
+  }, [activeSection, showSplash, doorState, isMuted]);
 
   // Track main menu theme playback position for the chill widget's progress bar
   useEffect(() => {

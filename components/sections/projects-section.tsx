@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { playHoverSound, playClickSound } from "../../lib/sounds";
 import projects from "@/data/projects-data.json";
@@ -194,7 +194,15 @@ function FlyingBooksBackground() {
 }
 
 export default function ProjectsSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number>(0);
+  // -1 = nothing selected yet. On desktop, hovering a row selects it (and a
+  // click on the already-selected row follows the link). On touch devices,
+  // hover never fires, so the first tap just selects/shows details and a
+  // second tap on the same row is what actually opens it.
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
+  // Tapping/clicking a link focuses it right before the click fires. Without
+  // this flag, that focus event would look identical to a genuine keyboard
+  // Tab-focus and pre-select the row before onClick gets to check it.
+  const pointerActivatedRef = useRef(false);
 
   if (!projects || projects.length === 0) {
     return null;
@@ -218,9 +226,10 @@ export default function ProjectsSection() {
     },
   };
 
-  const activeProject = projects[hoveredIndex] || projects[0];
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_activeProjectName, activeProjectDesc] = activeProject.name.split("–");
+  const activeProject = projects[activeIndex];
+  const activeProjectDesc = activeProject
+    ? activeProject.name.split("–")[1]
+    : undefined;
 
   return (
     <motion.div
@@ -277,7 +286,7 @@ export default function ProjectsSection() {
         {/* Scrollable Project List */}
         <div className="flex flex-col flex-1 max-h-[50vh] md:max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 md:pr-4 gap-1">
           {projects.map((project, index) => {
-            const isHovered = index === hoveredIndex;
+            const isHovered = index === activeIndex;
             const [projName] = project.name.split("–");
 
             return (
@@ -287,9 +296,37 @@ export default function ProjectsSection() {
                 href={project.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onMouseEnter={() => { setHoveredIndex(index); playHoverSound(); }}
-                onFocus={() => { setHoveredIndex(index); playHoverSound(); }}
-                onClick={playClickSound}
+                onPointerEnter={(e) => {
+                  // Touch devices fire a synthetic pointerenter (mouse-compat)
+                  // right before click, which would make the very first tap
+                  // look "already selected". Only real mice should preview-on-hover.
+                  if (e.pointerType !== "mouse") return;
+                  setActiveIndex(index);
+                  playHoverSound();
+                }}
+                onPointerDown={() => {
+                  pointerActivatedRef.current = true;
+                }}
+                onFocus={() => {
+                  // Skip the focus-triggered preview when focus was caused by
+                  // a tap/click (see pointerActivatedRef above) — onClick
+                  // already handles selection for that case.
+                  if (pointerActivatedRef.current) {
+                    pointerActivatedRef.current = false;
+                    return;
+                  }
+                  setActiveIndex(index);
+                  playHoverSound();
+                }}
+                onClick={(e) => {
+                  if (activeIndex !== index) {
+                    e.preventDefault();
+                    setActiveIndex(index);
+                    playHoverSound();
+                  } else {
+                    playClickSound();
+                  }
+                }}
                 className={`flex items-center px-2 md:px-4 py-2 md:py-2 relative group cursor-pointer transition-all ${
                   isHovered
                     ? "bg-white text-black"
@@ -355,7 +392,7 @@ export default function ProjectsSection() {
             <p className="text-sm md:text-lg font-medium tracking-wide shadow-black drop-shadow-md max-w-2xl text-white">
               {activeProjectDesc
                 ? activeProjectDesc.trim()
-                : "Review the project repository for details."}
+                : "Select a project to preview it, then select it again to open the repo."}
             </p>
           </div>
         </motion.div>
